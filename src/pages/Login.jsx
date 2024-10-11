@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { loginUser } from "../store/reducers/authSlice";
 import notify from "../hooks/useNotification";
 
-import LeftBanner from "../componets/LeftBanner";
+import LeftBanner from "../components/LeftBanner";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -77,7 +77,7 @@ export default function Login() {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.email}
-                    className="bg-gray-50 border border-gray-300 text-customBlue900 text-sm rounded-lg focus:ring-blue-500 focus:border-customBlue700 block w-full p-2.5"
+                    className="bg-gray-50 border border-gray-300 text-customBlue900 text-sm rounded-lg focus:ring-blue-500 focus:border-customBlue700 block w-full p-2"
                     required
                   />
                 </div>
