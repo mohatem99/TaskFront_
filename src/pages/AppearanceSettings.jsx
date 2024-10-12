@@ -7,7 +7,15 @@ export default function AppearanceSettings() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const [color, setColor] = useState('#3B82F6');
-  const [ selectedLogo,setSelectedLogo] =useState(logo)
+  const [ selectedLogo,setSelectedLogo] =useState(logo);
+  const [themeColors, setThemeColors] = useState({
+    customBlue900: '#10197A',
+    customBlue600: '#3D53DB',
+    customBlue300: '#98ABFF',
+    customLight: '#EFF4FF',
+    customGray: '#F5F5F7',
+  });
+
   useEffect(() => {
     const storedDarkMode = localStorage.getItem('isDarkMode');
     if (storedDarkMode !== null) {
@@ -24,9 +32,15 @@ export default function AppearanceSettings() {
     setColor(e.target.value);
   };
 
+  // const handleCircleClick = (newColor) => {
+  //   setColor(newColor);
+  // }
+
   const toggleSidebarVisibility = () => {
     setIsSidebarVisible(!isSidebarVisible);
   };
+
+
 
   useEffect(() => {
     if (isDarkMode) {
@@ -63,6 +77,22 @@ export default function AppearanceSettings() {
     document.getElementById('imageUpload').click();
   };
 
+  const handleCircleClick = (colorKey) => {
+    setThemeColors((prevColors) => ({
+      ...prevColors,
+      [colorKey]: color,
+    }));
+  };
+
+  const applyThemeColors = () => {
+    Object.keys(themeColors).forEach((colorKey) => {
+      const newColor = themeColors[colorKey];
+      document.documentElement.style.setProperty(`--${colorKey}`, newColor);
+    });
+  };
+  // useEffect(() => {
+  //   applyThemeColors();
+  // }, [themeColors]);
 
   return (
     <div className="ml-10 ">
@@ -100,18 +130,16 @@ export default function AppearanceSettings() {
           <h3 className="text-gray-400">Update your team theme</h3>
           </div>
           <div className="grid grid-rows-2 grid-cols-5 items-center mt-2 gap-x-0 gap-y-2">
-            <span className="inline-flex items-center justify-center w-10 h-10 bg-customlight rounded-full text-white"></span>
-            <span className="inline-flex items-center justify-center w-10 h-10 bg-customGray rounded-full text-white"></span>
-            <span className="inline-flex items-center justify-center w-10 h-10 bg-customBlue300 rounded-full text-white"></span>
-            <span className="inline-flex items-center justify-center w-10 h-10 bg-customBlue600 rounded-full text-white"></span>
-            <span className="inline-flex items-center justify-center w-10 h-10 bg-customBlue900 rounded-full text-white"></span>
-            <h3 className="text-gray-800 ml-5 dark:text-gray-400 mr-4">Custom Color: </h3>
-            <input
-              type="color"
-              value={color}
-              onChange={handleColorChange}
-              className="mt-1 px-5"
+          {Object.keys(themeColors).map((colorKey) => (
+            <span
+              key={colorKey}
+              className="w-10 h-10 rounded-full"
+              style={{ backgroundColor: themeColors[colorKey] }}
+              onClick={() => handleCircleClick(colorKey)}
             />
+          ))}
+            <h3 className="text-gray-800 ml-5 dark:text-gray-400 mr-4">Custom Color: </h3>
+            <input type="color" value={color} onChange={(e) => setColor(e.target.value)} />
           </div>
         </div>
         <hr className="bg-customBlue900 mt-10" />
@@ -223,6 +251,7 @@ export default function AppearanceSettings() {
         <button
           type="submit"
           className="text-white bg-customBlue900 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded text-xs px-4 py-2.5 text-center dark:bg-customBlue600 dark:hover:bg-customBlue300 dark:focus:ring-blue-800 hover:bg-customBlue300"
+        onClick={applyThemeColors}
         >
           Save Changes
         </button>

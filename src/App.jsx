@@ -5,6 +5,8 @@ import PasswordSettings from "./pages/PasswordSettings"
 import AppearanceSettings from "./pages/AppearanceSettings"
 import Login from "./pages/Login"
 import SignUp from "./pages/SignUp"
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 export default function App() {
   return (
     <>
@@ -14,12 +16,13 @@ export default function App() {
       <Route path="/login" element={<Login />} />
       <Route element={<SignUp/>} path="signup"></Route>
       <Route element={<SettLayout/>}>
-      <Route element={<ProfileSettings/>} path="profilesetting"></Route>
-      <Route element={<PasswordSettings/>} path="passwordsetting"></Route>
-      <Route element={<AppearanceSettings/>} path="appearancesetting"></Route>
+      <Route element={<ProfileSettings/>} path="profilesetting"/>
+      <Route element={<PasswordSettings/>} path="passwordsetting"/>
+      <Route element={<AppearanceSettings/>} path="appearancesetting"/>
     </Route>
     </Routes>
     </HashRouter>
+    <ToastContainer />
 
     </>
   )
