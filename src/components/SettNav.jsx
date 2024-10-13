@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 export default function SettNav() {
   return (
     <nav>
+
       <div className="max-w-screen-xl flex flex-wrap items-center justify-center mx-auto p-4">
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
           <ul className="font-medium flex flex-col p-10 md:py-1 px-8 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-customGray dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700 justify-center items-center">

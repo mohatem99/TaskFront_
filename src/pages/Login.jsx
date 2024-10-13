@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../store/reducers/authSlice";
 import notify from "../hooks/useNotification";
@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 
 export default function Login() {
   const dispatch = useDispatch();
-
+  const nav = useNavigate()
   // Validation schema with Yup
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -30,9 +30,10 @@ export default function Login() {
       };
       console.log(values)
       const result = await dispatch(loginUser(userData)).unwrap();
-
+      
       if (result) {
         notify("Login Successful!", "success");
+        nav("/dashboard")
       } else {
         notify("Login failed. Please check your credentials.", "error");
       }

@@ -1,11 +1,16 @@
 import { useState, useEffect } from 'react';
 import logo from '../assets/Logo.png';
 import axios from 'axios';
+import { useRef } from 'react';
+import SideBar from '../components/SideBar';
+import { useOutletContext } from 'react-router-dom';
 
 
 export default function AppearanceSettings() {
+  const fileInputRef = useRef(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+  const { isSidebarVisible,toggleSidebarVisibility } = useOutletContext();
+
   const [color, setColor] = useState('#3B82F6');
   const [ selectedLogo,setSelectedLogo] =useState(logo);
   const [themeColors, setThemeColors] = useState({
@@ -36,9 +41,6 @@ export default function AppearanceSettings() {
   //   setColor(newColor);
   // }
 
-  const toggleSidebarVisibility = () => {
-    setIsSidebarVisible(!isSidebarVisible);
-  };
 
 
 
@@ -63,7 +65,9 @@ export default function AppearanceSettings() {
         const response = await axios.post('/upload-image-endpoint', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
+
           },
+          
         });
         console.log('Image uploaded successfully:', response.data);
       } catch (error) {
@@ -74,7 +78,9 @@ export default function AppearanceSettings() {
   
 
   const triggerFileInput = () => {
-    document.getElementById('imageUpload').click();
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
 
   const handleCircleClick = (colorKey) => {
@@ -94,8 +100,11 @@ export default function AppearanceSettings() {
   //   applyThemeColors();
   // }, [themeColors]);
 
+
   return (
-    <div className="ml-10 ">
+    <div className='flex w-full'>
+    <div className='w-[98%]'>
+    <div className="ml-5 w-full">
       <h2 className="text-customBlue900 font-bold mt-20 dark:text-customBlue100">Appearance Information</h2>
       <h2 className="text-customBlue900 font-bold mt-5 dark:text-customBlue100">Team Logo</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 items-center space-x-0 md:space-x-3 ml-14">
@@ -109,8 +118,9 @@ export default function AppearanceSettings() {
            <input 
           type="file" 
           accept="image/*" 
-          id="imageUpload" 
+          id="image" 
           onChange={handleLogoUpload} 
+          ref={fileInputRef}
           style={{ display: 'none' }} 
         />
           <button
@@ -129,7 +139,7 @@ export default function AppearanceSettings() {
           <div>
           <h3 className="text-gray-400">Update your team theme</h3>
           </div>
-          <div className="grid grid-rows-2 grid-cols-5 items-center mt-2 gap-x-0 gap-y-2">
+          <div className="grid grid-rows-2 grid-cols-5 items-center mt-2 gap-x-0 gap-y-5">
           {Object.keys(themeColors).map((colorKey) => (
             <span
               key={colorKey}
@@ -138,8 +148,10 @@ export default function AppearanceSettings() {
               onClick={() => handleCircleClick(colorKey)}
             />
           ))}
+          <div className='flex gap-x-5 justify-center items-center'>
             <h3 className="text-gray-800 ml-5 dark:text-gray-400 mr-4">Custom Color: </h3>
-            <input type="color" value={color} onChange={(e) => setColor(e.target.value)} />
+            <input type="color" value={color} onChange={(e) => setColor(e.target.value)} className='p-4' />
+            </div>
           </div>
         </div>
         <hr className="bg-customBlue900 mt-10" />
@@ -160,12 +172,12 @@ export default function AppearanceSettings() {
         <div className="flex justify-between items-center space-x-0 md:space-x-3 ml-14">
           <h3 className="text-gray-400">Activate your transparent sidebar</h3>
           <div className="flex justify-end">
-            <button
-              onClick={toggleSidebarVisibility}
-              className="px-2 py-1 text-white bg-customBlue900 rounded-lg dark:bg-customBlue600  dark:hover:bg-customBlue300 focus:outline-none hover:bg-customBlue300"
-            >
-              {isSidebarVisible ? 'Hide Sidebar' : 'Show Sidebar'}
-            </button>
+          <button
+          className="px-2 py-1 mt-4 text-white bg-customBlue900 rounded-lg dark:bg-customBlue600 dark:hover:bg-customBlue300 focus:outline-none hover:bg-customBlue300"
+          onClick={toggleSidebarVisibility}
+        >
+          {isSidebarVisible ? "Hide Sidebar" : "Show Sidebar"}
+        </button>
           </div>
         </div>
         <hr className="bg-customBlue900 mt-10" />
@@ -248,14 +260,18 @@ export default function AppearanceSettings() {
         >
           Cancel
         </button>
-        <button
-          type="submit"
-          className="text-white bg-customBlue900 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded text-xs px-4 py-2.5 text-center dark:bg-customBlue600 dark:hover:bg-customBlue300 dark:focus:ring-blue-800 hover:bg-customBlue300"
-        onClick={applyThemeColors}
-        >
-          Save Changes
-        </button>
+        <button 
+              type="submit" 
+              className="text-white bg-customBlue900 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded text-xs px-4 py-2.5 text-center dark:bg-customBlue600 dark:hover:bg-customBlue300 dark:focus:ring-blue-800 hover:bg-customBlue300"
+
+          
+            >
+              Save Changes
+            </button>
       </div>
     </div>
+    </div>
+    </div>
+
   );
 }

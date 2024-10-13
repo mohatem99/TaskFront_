@@ -1,8 +1,74 @@
 import avatar from '../assets/Avatar.png';
 import { useState } from 'react';
 import axios from 'axios';
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { useDispatch } from 'react-redux';
+import { useRef } from 'react';
 export default function ProfileSettings() {
+  const dispatch = useDispatch()
+  const fileInputRef = useRef(null);
+  const validationSchema = Yup.object({
+    fullName: Yup.string()
+    .min(3, 'Full Name must be at least 3 characters long'),
+        email: Yup.string()
+      .email("Invalid email format"),
+      location: Yup.string(),
+    
+    phoneNumber: Yup.string()
+      .matches(/^[0-9]{10,15}$/, 'Phone number must be between 10 and 15 digits'),
+      companyName: Yup.string(),
+    
+    role: Yup.string(),
+    image: Yup.mixed()
+      .nullable()
+      .test(
+        "fileSize",
+        "Image size is too large. Max size is 2MB.",
+        (value) => !value || (value && value.size <= 2000000)
+      ),
+  });
 
+  const initialValues = {
+    fullName: "",
+    email: "",
+    phoneNumber: "",
+    location: "",
+    role: "",
+    companyName: "",
+    image: null
+  };
+  const handleChanges = async (values, { setSubmitting }) => {
+    try {
+      const formData = new FormData();
+      formData.append("fullName", values.fullName);
+      formData.append("email", values.email);
+      formData.append("location", values.location);
+      formData.append("role", values.role);
+      formData.append("companyName", values.companyName);
+      formData.append("phoneNumber", values.phoneNumber);
+
+      if (values.image) {
+        formData.append("image", values.image);
+      }
+      const response = await axios.post('/your-api-endpoint', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+  
+      console.log('Form submitted successfully:', response.data);
+    } catch (error) {
+      console.error('Error submitting form:', error.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit: handleChanges,
+  });
   const [selectedImage,setSelectedImage] = useState(avatar)
 
 const handleImageUpload = async (e) => {
@@ -31,26 +97,45 @@ const handleImageDelete = () => {
   setSelectedImage(avatar);
 }
 const triggerFileInput = () => {
-  document.getElementById('imageUpload').click();
-};
+  if (fileInputRef.current) {
+    fileInputRef.current.click();
+}}
 
   return (
     <div className='ml-10 md:ml-5 lg:ml-10 '>
       <h2 className='text-customBlue900 font-bold mt-20 text-lg md:text-xl lg:text-2xl dark:text-customBlue100'>Profile Information</h2>
-      <div className="flex flex-col md:flex-row items-center space-x-0 md:space-x-3 ml-0 md:ml-14 mt-4">
-        <img
-          className="w-14 h-14 rounded-full mb-3 md:mb-0"
-          src={selectedImage}
-          alt="User Avatar"
-        />
-                <input 
-          type="file" 
-          accept="image/*" 
-          id="imageUpload" 
-          onChange={handleImageUpload} 
-          style={{ display: 'none' }} 
-        />
-        <button 
+
+      <div>
+        <form className="w-full" onSubmit={formik.handleSubmit}>
+        <div className="flex md:flex-row items-center md:space-x-3 ml-0 md:ml-14 my-5">
+        <div className=" flex justify-start items-center gap-x-5 mb-5">
+              <input
+                    type="file"
+                    id="image"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
+
+                  <div
+              onClick={triggerFileInput}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm block flex items-center justify-center cursor-pointer  w-20 h-20 rounded-full"
+            >
+              {selectedImage ? (
+                <img src={selectedImage} alt="Uploaded" className="h-full w-full object-cover rounded-lg" />
+              ) : (
+                <div className="">
+                <img src={avatar} alt="upload-icon" className=" mb-3"/>
+                </div>
+                )}
+            </div>
+                  {formik.errors.image && formik.touched.image ? (
+                    <div className="text-red-500 text-sm">
+                      {formik.errors.image}
+                    </div>
+                  ) : null}
+                          <button 
           type="button" 
           className="text-white mt-5 bg-customBlue900 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded text-xs px-4 py-2.5 dark:bg-customBlue600 dark:hover:bg-customBlue300 hover:bg-customBlue300"
           onClick={triggerFileInput}
@@ -64,22 +149,24 @@ const triggerFileInput = () => {
         >
           Delete Photo
         </button>
+          </div>
+       
       </div>
-      <hr className='bg-customBlue900 mt-14' />
-      <div>
-        <form className="max-w-full mx-auto grid grid-cols-1 md:grid-cols-2 gap-x-10 mt-7">
+      <div className='w-full mx-auto grid grid-cols-2 gap-x-10 mt-7'>
           <div className="mb-5">
             <label
-              htmlFor="fullname"
+              htmlFor="fullName"
               className="block mb-2 text-sm font-medium text-customBlue900 dark:text-customBlue100"
             >
               Full Name
             </label>
             <input
               type="text"
-              id="fullname"
+              id="fullName"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.fullName}
               className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-customBlue100 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light dark:focus:bg-customGray"
-              required=""
             />
           </div>
           <div className="mb-5">
@@ -92,8 +179,10 @@ const triggerFileInput = () => {
             <input
               type="email"
               id="email"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.email}
               className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-customBlue100 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light dark:focus:bg-customGray"
-              required=""
             />
           </div>
           <div className="mb-5">
@@ -106,22 +195,26 @@ const triggerFileInput = () => {
             <input
               type="text"
               id="location"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.location}
               className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-customBlue100 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light dark:focus:bg-customGray"
-              required=""
             />
           </div>
           <div className="mb-5">
             <label
-              htmlFor="number"
+              htmlFor="phoneNumber"
               className="block mb-2 text-sm font-medium text-customBlue900 dark:text-customBlue100"
             >
               Phone Number
             </label>
             <input
               type="text"
-              id="number"
+              id="phoneNumber"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.phoneNumber}
               className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-customBlue100 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light dark:focus:bg-customGray"
-              required=""
             />
           </div>
           <div className="mb-5">
@@ -134,23 +227,28 @@ const triggerFileInput = () => {
             <input
               type="text"
               id="role"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.role}
               className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-customBlue100 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light dark:focus:bg-customGray"
-              required=""
             />
           </div>
           <div className="mb-5">
             <label
-              htmlFor="company"
+              htmlFor="companyName"
               className="block mb-2 text-sm font-medium text-customBlue900 dark:text-customBlue100"
             >
-              Company
+              Company Name
             </label>
             <input
               type="text"
-              id="company"
+              id="companyName"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.companyName}
               className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-customBlue100 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light dark:focus:bg-customGray"
-              required=""
             />
+          </div>
           </div>
           <div className='col-span-2 flex justify-end mt-5'>
             <button 
@@ -161,7 +259,10 @@ const triggerFileInput = () => {
             </button>
             <button 
               type="submit" 
-              className="text-white bg-customBlue900 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded text-xs px-4 py-2.5 text-center dark:bg-customBlue600 dark:hover:bg-customBlue300 dark:focus:ring-blue-800 hover:bg-customBlue300"
+              className={`text-white bg-customBlue900 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded text-xs px-4 py-2.5 text-center dark:bg-customBlue600 dark:hover:bg-customBlue300 dark:focus:ring-blue-800 hover:bg-customBlue300${
+                formik.isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              disabled={formik.isSubmitting}
             >
               Save Changes
             </button>
