@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* Custom width for the calendar */
+.react-calendar {
+    width: 100%;
+    max-width: 500px; 
+    border: 1px solid #4a90e2;
+    border-radius: 8px;
+    margin: 2px;
+    padding: 3px;
+  }
+
+  @media (max-width: 640px) {
+    .react-calendar {
+      max-width: 300px;
+      padding: 2px; 
+    }
+  }
+  
+  .react-calendar__tile {
+    border-radius: 5px; 
+  }
+  
+
+  .react-calendar__tile--now {
+    background: #98ABFF;
+    color: darkest;
+}
+
