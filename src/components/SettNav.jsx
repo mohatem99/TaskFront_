@@ -2,10 +2,12 @@ import { NavLink } from "react-router-dom";
 
 export default function SettNav() {
   return (
-    <nav className="bg-gray-50 dark:bg-gray-800 w-full">
-      <div className="bg-gray-50 dark:bg-gray-800 w-full">
+    <div className="flex justify-center items-center">
+    <nav className="bg-gray-50 dark:bg-gray-800 w-full lg:w-[50%] md:w-[70%] sm:w-full">
+
+      <div className="bg-gray-50 dark:bg-gray-800">
         <div className="w-full" id="navbar-default">
-          <ul className="font-medium flex flex-row items-center justify-between space-x-4 p-4 border-b border-gray-200 md:border-0 dark:border-gray-700">
+          <ul className="font-medium flex flex-row items-center justify-between p-4 border-b border-gray-200 md:border-0 dark:border-gray-700">
             
             <li>
               <NavLink
@@ -50,5 +52,6 @@ export default function SettNav() {
         </div>
       </div>
     </nav>
+    </div>
   );
 }
