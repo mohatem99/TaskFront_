@@ -89,9 +89,9 @@ export function SideBarComponent() {
             <li>
               <Link
                 to="/dashboard"
-                className={`mb-4 flex items-center p-2 rounded-lg group ${
+                className={`mb-4 flex  p-2  group ${
                   isActive("/dashboard")
-                    ? "bg-darkest dark:bg-gray-600 text-white"
+                    ? "bg-darkest dark:bg-gray-600 text-white rounded-r-lg"
                     : "text-darkest dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                 }`}
               >
@@ -109,9 +109,9 @@ export function SideBarComponent() {
             <li>
                 <Link
                   to="/analytics"
-                  className={` mb-4 flex items-center p-2 rounded-lg group ${
+                  className={` mb-4 flex items-center p-2 group ${
                     isActive("/analytics")
-                      ? "bg-darkest dark:bg-gray-600 text-white"
+                      ? "bg-darkest dark:bg-gray-600 text-white rounded-r-lg"
                       : "text-darkest dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                   }`}
                 >
@@ -125,9 +125,9 @@ export function SideBarComponent() {
             <li>
             <Link
                 to="/tasks"
-                className={`mb-4 flex items-center p-2 rounded-lg group ${
-                  isActive("/create-task")
-                    ? "bg-darkest dark:bg-gray-600 text-white"
+                className={`mb-4 flex items-center p-2 group ${
+                  isActive("/tasks")
+                    ? "bg-darkest dark:bg-gray-600 text-white rounded-r-lg"
                     : "text-darkest dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                 }`}
               >
@@ -145,9 +145,9 @@ export function SideBarComponent() {
             <li>
               <Link
                 to="/create-task"
-                className={`mb-4 flex items-center p-2 rounded-lg group ${
+                className={`mb-4 flex items-center p-2 group ${
                   isActive("/create-task")
-                    ? "bg-darkest dark:bg-gray-600 text-white"
+                    ? "bg-darkest dark:bg-gray-600 text-white rounded-r-lg"
                     : "text-darkest dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                 }`}
               >
@@ -163,9 +163,9 @@ export function SideBarComponent() {
             <li>
               <Link
                 to="/settings"
-                className={`mb-4 flex items-center p-2 rounded-lg group ${
+                className={`mb-4 flex items-center p-2 group ${
                   isActive("/settings")
-                    ? "bg-darkest dark:bg-gray-600 text-white"
+                    ? "bg-darkest dark:bg-gray-600 text-white rounded-r-lg"
                     : "text-darkest dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                 }`}
               >
@@ -185,8 +185,8 @@ export function SideBarComponent() {
                 }`}
               >
              <svg className="w-8 h-8" width="29" height="49" viewBox="0 0 29 49" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M14.5 24.4284H27M27 24.4284L21.6428 31.9037M27 24.4284L21.6428 16.9531" stroke="#10197A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M26.9999 9.47531V6.98354C26.9999 4.23121 25.401 2 23.4285 2H5.57142C3.59898 2 2 4.23121 2 6.98354V41.8683C2 44.6207 3.59898 46.8519 5.57142 46.8519H23.4285C25.401 46.8519 26.9999 44.6207 26.9999 41.8683V39.3765" stroke="#10197A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M14.5 24.4284H27M27 24.4284L21.6428 31.9037M27 24.4284L21.6428 16.9531" stroke="#10197A" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M26.9999 9.47531V6.98354C26.9999 4.23121 25.401 2 23.4285 2H5.57142C3.59898 2 2 4.23121 2 6.98354V41.8683C2 44.6207 3.59898 46.8519 5.57142 46.8519H23.4285C25.401 46.8519 26.9999 44.6207 26.9999 41.8683V39.3765" stroke="#10197A" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
                 <span className="flex-1 ms-3 whitespace-nowrap font-bold">
                   Log Out

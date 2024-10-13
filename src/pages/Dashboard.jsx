@@ -22,7 +22,7 @@ export default function Dashboard() {
         <div className="relative flex flex-col p-3 bg-lightyellow text-darkest border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 lg:w-2/5 sm:w-1/2">
         <div className="flex flex-row p-1">
             <svg
-              class="w-5 mt-2 h-5 text-darkest dark:text-white"
+              className="w-5 mt-2 h-5 text-darkest dark:text-white"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"
