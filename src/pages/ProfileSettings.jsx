@@ -101,7 +101,7 @@ const triggerFileInput = () => {
 
   return (
     <div className='ml-10 md:ml-5 lg:ml-10 '>
-      <h2 className='text-customBlue900 font-bold mt-20 text-lg md:text-xl lg:text-2xl dark:text-customBlue100'>Profile Information</h2>
+      <h2 className='text-customBlue900 font-bold mt-10 text-lg md:text-xl lg:text-2xl dark:text-customBlue100'>Profile Information</h2>
 
       <div>
         <form className="w-full" onSubmit={formik.handleSubmit}>

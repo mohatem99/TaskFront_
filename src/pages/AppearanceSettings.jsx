@@ -12,13 +12,6 @@ export default function AppearanceSettings() {
 
   const [color, setColor] = useState('#3B82F6');
   const [ selectedLogo,setSelectedLogo] =useState(logo);
-  const [themeColors, setThemeColors] = useState({
-    customBlue900: '#10197A',
-    customBlue600: '#3D53DB',
-    customBlue300: '#98ABFF',
-    customLight: '#EFF4FF',
-    customGray: '#F5F5F7',
-  });
 
   useEffect(() => {
     const storedDarkMode = localStorage.getItem('isDarkMode');
@@ -72,22 +65,12 @@ export default function AppearanceSettings() {
     }
   };
 
-  const handleCircleClick = (colorKey) => {
-    setThemeColors((prevColors) => ({
-      ...prevColors,
-      [colorKey]: color,
-    }));
-  };
-
-
-
-
   return (
     <div className='flex w-full'>
     <div className='w-[98%]'>
     <div className="ml-5 w-full">
-      <h2 className="text-customBlue900 font-bold mt-20 dark:text-customBlue100">Appearance Information</h2>
-      <h2 className="text-customBlue900 font-bold mt-5 dark:text-customBlue100">Team Logo</h2>
+      <h2 className="text-customBlue900 font-bold mt-3 dark:text-customBlue100">Appearance Information</h2>
+      <h2 className="text-customBlue900 font-bold mt-2 dark:text-customBlue100">Team Logo</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 items-center space-x-0 md:space-x-3 ml-14">
         <h3 className="text-gray-400">Update your team logo</h3>
         <div className="flex items-center mt-2">
@@ -113,28 +96,6 @@ export default function AppearanceSettings() {
           </button>
         </div>
       </div>
-      <hr className="bg-customBlue900 mt-10" />
-      <div>
-      <h2 className="text-customBlue900 font-bold mt-5 dark:text-customBlue100">Theme</h2>
-        <div className="flex justify-between md:grid-cols-2 items-center space-x-0 md:space-x-3 ml-14">
-          <div>
-          <h3 className="text-gray-400">Update your team theme</h3>
-          </div>
-          <div className="grid grid-rows-2 grid-cols-5 items-center mt-2 gap-x-0 gap-y-5">
-          {Object.keys(themeColors).map((colorKey) => (
-            <span
-              key={colorKey}
-              className="w-10 h-10 rounded-full"
-              style={{ backgroundColor: themeColors[colorKey] }}
-              onClick={() => handleCircleClick(colorKey)}
-            />
-          ))}
-          <div className='flex gap-x-5 justify-center items-center'>
-            <h3 className="text-gray-800 ml-5 dark:text-gray-400 mr-4">Custom Color: </h3>
-            <input type="color" value={color} onChange={(e) => setColor(e.target.value)} className='p-4' />
-            </div>
-          </div>
-        </div>
         <hr className="bg-customBlue900 mt-10" />
         <h2 className="text-customBlue900 font-bold mt-5 dark:text-customBlue100">Night Mode</h2>
         <div className="flex justify-between items-center space-x-0 md:space-x-3 ml-14">
@@ -252,7 +213,5 @@ export default function AppearanceSettings() {
       </div>
     </div>
     </div>
-    </div>
-
   );
 }
