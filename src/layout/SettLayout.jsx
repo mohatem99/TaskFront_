@@ -1,6 +1,6 @@
 import SettNav from "../components/SettNav";
 import { Outlet } from "react-router-dom";
-import SideBar from "../components/SideBar";
+import Sidebar from "../components/Sidebar";
 import { useState } from "react";
 
 export default function Layout() {
@@ -11,7 +11,7 @@ export default function Layout() {
   return (
     
     <div className=" flex justify-end min-h-screen">
-       {isSidebarVisible && <SideBar />}
+       {isSidebarVisible && <Sidebar />}
       <div className="w-full p-4 dark:bg-gray-800 dark:text-white">
       <header className="text-2xl font-bold text-customBlue900 dark:text-white ml-40 mt-10">
           Settings

@@ -3,10 +3,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useDispatch } from 'react-redux';
 import { useRef } from 'react';
 export default function ProfileSettings() {
-  const dispatch = useDispatch()
   const fileInputRef = useRef(null);
   const validationSchema = Yup.object({
     fullName: Yup.string()

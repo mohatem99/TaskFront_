@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import logo from '../assets/Logo.png';
 import axios from 'axios';
 import { useRef } from 'react';
-import SideBar from '../components/SideBar';
 import { useOutletContext } from 'react-router-dom';
 
 
@@ -32,16 +31,6 @@ export default function AppearanceSettings() {
     setIsDarkMode(!isDarkMode);
     localStorage.setItem('isDarkMode', JSON.stringify(!isDarkMode));
   };
-
-  const handleColorChange = (e) => {
-    setColor(e.target.value);
-  };
-
-  // const handleCircleClick = (newColor) => {
-  //   setColor(newColor);
-  // }
-
-
 
 
   useEffect(() => {
@@ -90,15 +79,7 @@ export default function AppearanceSettings() {
     }));
   };
 
-  const applyThemeColors = () => {
-    Object.keys(themeColors).forEach((colorKey) => {
-      const newColor = themeColors[colorKey];
-      document.documentElement.style.setProperty(`--${colorKey}`, newColor);
-    });
-  };
-  // useEffect(() => {
-  //   applyThemeColors();
-  // }, [themeColors]);
+
 
 
   return (
