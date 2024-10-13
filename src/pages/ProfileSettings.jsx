@@ -1,13 +1,20 @@
 import avatar from '../assets/Avatar.png';
-import { useState } from 'react';
-import axios from 'axios';
+import { useState,useEffect,useRef } from 'react';
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useRef } from 'react';
+import { profileData,updateLoggedUser } from '../store/reducers/userSlice';
+import {useDispatch,useSelector } from 'react-redux';
+import notify from '../hooks/useNotification';
+import Cookies from 'js-cookie';
+
+
 export default function ProfileSettings() {
+  const profile = useSelector((state) => state.user.user);
+  const token = Cookies.get("token")
+  const dispatch = useDispatch()
   const fileInputRef = useRef(null);
   const validationSchema = Yup.object({
-    fullName: Yup.string()
+    name: Yup.string()
     .min(3, 'Full Name must be at least 3 characters long'),
         email: Yup.string()
       .email("Invalid email format"),
@@ -28,18 +35,17 @@ export default function ProfileSettings() {
   });
 
   const initialValues = {
-    fullName: "",
-    email: "",
-    phoneNumber: "",
-    location: "",
-    role: "",
-    companyName: "",
-    image: null
+    name: profile?.name || "",
+    email: profile?.email || "",
+    phoneNumber: profile?.phoneNumber || "",
+    location: profile?.location || "",
+    role: profile?.role || "",
+    companyName: profile?.companyName || "",
   };
   const handleChanges = async (values, { setSubmitting }) => {
     try {
       const formData = new FormData();
-      formData.append("fullName", values.fullName);
+      formData.append("name", values.name);
       formData.append("email", values.email);
       formData.append("location", values.location);
       formData.append("role", values.role);
@@ -49,25 +55,38 @@ export default function ProfileSettings() {
       if (values.image) {
         formData.append("image", values.image);
       }
-      const response = await axios.post('/your-api-endpoint', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-  
-      console.log('Form submitted successfully:', response.data);
+      const result = await dispatch(updateLoggedUser(formData)).unwrap();
+      if (result) {
+        notify("Updated Successfuly!", "success");
+      } else {
+        notify("Failed Update!. Please Login", "error");
+      }
     } catch (error) {
-      console.error('Error submitting form:', error.message);
+      notify(error.message, "error");
     } finally {
       setSubmitting(false);
     }
   };
+  
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit: handleChanges,
   });
   const [selectedImage,setSelectedImage] = useState(avatar)
+
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      if (token) {
+        const result = await dispatch(profileData()).unwrap();
+        if (result) {
+          formik.setValues(result);
+        }
+      }
+    };
+    fetchProfileData();
+  }, []);
 
 const handleImageUpload = async (e) => {
   const file = e.target.files[0];
@@ -79,12 +98,7 @@ const handleImageUpload = async (e) => {
     formData.append('image', file);
 
     try {
-      const response = await axios.post('/upload-image-endpoint', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-      console.log('Image uploaded successfully:', response.data);
+      console.log('Image uploaded successfully:', file.data);
     } catch (error) {
       console.error('Error uploading the image:', error);
     }
@@ -153,36 +167,24 @@ const triggerFileInput = () => {
       <div className='w-full mx-auto grid grid-cols-2 gap-x-10 mt-7'>
           <div className="mb-5">
             <label
-              htmlFor="fullName"
+              htmlFor="name"
               className="block mb-2 text-sm font-medium text-customBlue900 dark:text-customBlue100"
             >
               Full Name
             </label>
             <input
               type="text"
-              id="fullName"
+              id="name" {...formik.getFieldProps('name')}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.fullName}
+              value={formik.values.name}
               className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-customBlue100 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light dark:focus:bg-customGray"
             />
+            {formik.errors.name && formik.touched.name && (
+                <div className="text-red-500 text-sm">{formik.errors.name}</div>
+              )}
           </div>
-          <div className="mb-5">
-            <label
-              htmlFor="email"
-              className="block mb-2 text-sm font-medium text-customBlue900 dark:text-customBlue100"
-            >
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.email}
-              className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-customBlue100 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light dark:focus:bg-customGray"
-            />
-          </div>
+         
           <div className="mb-5">
             <label
               htmlFor="location"

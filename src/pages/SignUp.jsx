@@ -14,14 +14,10 @@ export default function SignUp() {
 
   // Validation schema with Yup
   const validationSchema = Yup.object({
-    firstName: Yup.string()
+    name: Yup.string()
     .min(2, 'First Name must be at least 2 characters')
     .max(50, 'Too Long!')
     .required('First Name is required'),
-  lastName: Yup.string()
-    .min(2, 'Last Name must be at least 2 characters')
-    .max(50, 'Too Long!')
-    .required('Last Name is required'),
     email: Yup.string()
       .email("Invalid email format")
       .required("Email is required"),
@@ -41,8 +37,7 @@ export default function SignUp() {
     });
 
   const initialValues = {
-    firstName: "",
-    lastName: "",
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -63,10 +58,7 @@ export default function SignUp() {
       if (values.image) {
         formData.append("image", values.image);
       }
-
-      console.log(values)
       const result = await dispatch(registerUser(formData)).unwrap();
-      console.log(result)
 
 
       if (result) {
@@ -154,23 +146,21 @@ export default function SignUp() {
         </button>
           </div>
 
-
-              <div className='grid grid-cols-2 gap-x-3'>
                 <div className="mb-5">
                   <label
-                    htmlFor="firstName"
+                    htmlFor="name"
                     className="block mb-2 text-sm font-medium text-gray-500"
                   >
-                    First Name
+                    Full Name
                   </label>
                   <input
                     type="text"
-                    id="firstName"
+                    id="name"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.firstName}
+                    value={formik.values.name}
                     className={`bg-gray-50 border ${
-                      formik.errors.firstName && formik.touched.firstName
+                      formik.errors.name && formik.touched.name
                         ? "border-red-500"
                         : "border-gray-300"
                     } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-customBlue700 block w-full p-2.5`}
@@ -180,31 +170,7 @@ export default function SignUp() {
                     <div className="text-red-500 text-sm">{formik.errors.firstName}</div>
                   )}
                 </div>
-                <div className="mb-5">
-                  <label
-                    htmlFor="lastName"
-                    className="block mb-2 text-sm font-medium text-gray-500"
-                  >
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    id="lastName"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.lastName}
-                    className={`bg-gray-50 border ${
-                      formik.errors.lastName && formik.touched.lastName
-                        ? "border-red-500"
-                        : "border-gray-300"
-                    } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-customBlue700 block w-full p-2.5`}
-                    required
-                  />
-                  {formik.errors.lastName && formik.touched.lastName && (
-                    <div className="text-red-500 text-sm">{formik.errors.lastName}</div>
-                  )}
-                </div>
-                </div>
+               
                 <div className="mb-5">
                   <label
                     htmlFor="email"

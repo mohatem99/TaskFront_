@@ -28,7 +28,6 @@ export default function Login() {
         email: values.email,
         password: values.password,
       };
-      console.log(values)
       const result = await dispatch(loginUser(userData)).unwrap();
       
       if (result) {
