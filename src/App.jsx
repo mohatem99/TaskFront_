@@ -1,4 +1,4 @@
-import Login from "./pages/Login";
+import Login from "./components/Auth/Login";
 
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
@@ -9,6 +9,10 @@ import Layout from "./components/layout/Layout";
 import Dashboard from "./pages/Dashboard";
 import Landing from "./pages/Landing";
 import AuthGuard from "./guard/AuthGuard";
+import ForgetPass from "./components/Auth/ForgetPass";
+import CheckEmail from "./components/Auth/CheckEmail";
+import NewPass from "./components/Auth/NewPass";
+import SignUp from "./components/Auth/SignUp";
 
 let router = createBrowserRouter([
   {
@@ -22,6 +26,22 @@ let router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/signup",
+    element: <SignUp />,
+  },
+  {
+    path: "/forget-pass",
+    element: <ForgetPass />,
+  },
+  {
+    path: "/check-email",
+    element: <CheckEmail />,
+  },
+  {
+    path: "/new-pass",
+    element: <NewPass />,
   },
   {
     path: "/dashboard",

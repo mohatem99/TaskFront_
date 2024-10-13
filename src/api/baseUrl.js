@@ -1,7 +1,7 @@
-import axios from "axios"
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8007/api',
+  baseURL: "https://task-management-depi.vercel.app/api",
 });
 
-export default  api
+export default api;

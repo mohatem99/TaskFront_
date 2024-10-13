@@ -3,21 +3,29 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-import { useDispatch } from "react-redux";
-import { loginUser } from "../store/reducers/authSlice";
-import notify from "../hooks/useNotification";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../../store/reducers/authSlice";
+import notify from "../../hooks/useNotification";
 
-import LeftBanner from "../components/LeftBanner";
+import LeftBanner from "../LeftBanner";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loading, error } = useSelector((state) => state.auth);
 
   // Validation schema with Yup
   const validationSchema = Yup.object({
     email: Yup.string()
       .email("Invalid email format")
       .required("Email is required"),
-    password: Yup.string().required("Password is required"),
+    password: Yup.string()
+      .required("Password is required")
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+      ),
   });
 
   const initialValues = {
@@ -34,6 +42,7 @@ export default function Login() {
 
       if (result) {
         notify("Login Successful!", "success");
+        navigate("/dashboard");
       } else {
         notify("Login failed. Please check your credentials.", "error"); // Error toast
       }
@@ -78,8 +87,12 @@ export default function Login() {
                     onBlur={formik.handleBlur}
                     value={formik.values.email}
                     className="bg-gray-50 border border-gray-300 text-customBlue900 text-sm rounded-lg focus:ring-blue-500 focus:border-customBlue700 block w-full p-2"
-                    required
                   />
+                  {formik.errors.email && formik.touched.email && (
+                    <p className="bg-teal-500 text-white p-2 my-1 text-sm rounded-lg">
+                      {formik.errors.email}
+                    </p>
+                  )}
                 </div>
                 <div className="mb-5">
                   <label
@@ -95,40 +108,50 @@ export default function Login() {
                     onBlur={formik.handleBlur}
                     value={formik.values.password}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-customBlue700 block w-full p-2.5"
-                    required
                   />
+                  {formik.errors.password && formik.touched.password && (
+                    <div className="w-64">
+                      <p className="bg-teal-500 text-white p-2 my-1 text-sm rounded-lg ">
+                        {formik.errors.password}
+                      </p>
+                    </div>
+                  )}
                 </div>
-                <div className="flex items-start mb-5">
-                  <div className="flex items-center h-5">
-                    <input
-                      id="remember"
-                      type="checkbox"
-                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300"
-                      required
-                    />
-                  </div>
-                  <div className="flex justify-between w-full">
-                    <label
-                      htmlFor="remember"
-                      className="ml-2 text-sm font-medium text-customBlue900"
-                    >
-                      Remember me
-                    </label>
-                    <a className="text-customBlue900 font-semibold">
-                      Forget Password?
-                    </a>
+                <div className="flex justify-content items-start mb-5">
+                  <div className="flex items-start mb-5">
+                    <div className="flex justify-between w-full">
+                      <Link
+                        to="/forget-pass"
+                        className="text-customBlue900 font-semibold"
+                      >
+                        Forget Password?
+                      </Link>
+                    </div>
                   </div>
                 </div>
                 <button
                   type="submit"
-                  disabled={formik.isSubmitting} // Disable the button when submitting
-                  className={`text-white bg-customBlue900 hover:bg-customBlue600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-4 w-full ${
-                    formik.isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
+                  disabled={loading} // Disable the button when submitting
+                  className="text-white bg-customBlue900 hover:bg-customBlue600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-4 w-full"
                 >
-                  Login
-                </button>
+                  {loading ? (
+                    <>
+                      <i className="fas fa-spinner fa-spin mx-2 white-icon"></i>
+                      {/* <span>Loading...</span> */}
+                    </>
+                  ) : (
+                    <span>Login</span>
+                  )}
+                </button>{" "}
               </form>
+              <div className="flex justify-center items-center">
+                <p className="text-gray-500 mt-10">
+                  Don't Have an account?{" "}
+                  <Link to={"/signup"} className="text-customBlue900 font-bold">
+                    Signup
+                  </Link>
+                </p>
+              </div>
             </div>
           </div>
         </div>
