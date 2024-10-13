@@ -13,36 +13,38 @@ import ForgetPass from "./components/Auth/ForgetPass";
 import CheckEmail from "./components/Auth/CheckEmail";
 import NewPass from "./components/Auth/NewPass";
 import SignUp from "./components/Auth/SignUp";
+import Auth from "./components/layout/Auth";
 
 let router = createBrowserRouter([
+  // {
+  //   path: "/home",
+  //   element: (
+  //     <AuthGuard>
+  //       <Landing />
+  //     </AuthGuard>
+  //   ),
+  // },
   {
     path: "/",
-    element: (
-      <AuthGuard>
-        <Landing />
-      </AuthGuard>
-    ),
+    element: <Auth />,
+    children: [
+      {
+        index: true,
+        element: (
+          <AuthGuard>
+            <Landing />
+          </AuthGuard>
+        ),
+      },
+
+      { path: "login", element: <Login /> },
+      { path: "signup", element: <SignUp /> },
+      { path: "forget-pass", element: <ForgetPass /> },
+      { path: "check-email", element: <CheckEmail /> },
+      { path: "new-pass", element: <NewPass /> },
+    ],
   },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/signup",
-    element: <SignUp />,
-  },
-  {
-    path: "/forget-pass",
-    element: <ForgetPass />,
-  },
-  {
-    path: "/check-email",
-    element: <CheckEmail />,
-  },
-  {
-    path: "/new-pass",
-    element: <NewPass />,
-  },
+
   {
     path: "/dashboard",
     element: <Layout />,

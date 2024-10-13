@@ -108,165 +108,158 @@ export default function SignUp() {
   };
 
   return (
-    <div className="h-screen">
-      <div className="h-[100%] grid  grid-cols-1 md:grid-cols-3  gap-9">
-        <div className=" md:col-span-1 w-full bg-white">
-          <div className=" hidden md:block w-3/4 h-screen bg-customBlue900 text-white z-10">
-            <LeftBanner />
-          </div>
-        </div>
-        <div className="w-full col-span-1 md:col-span-2 ">
-          <div className="flex items-center justify-center w-full md:w-3/4 mt-5">
-            <div>
-              <form className="w-full" onSubmit={formik.handleSubmit}>
-                <h1 className="text-customBlue900 font-bold mb-12 text-2xl text-center mt-5">
-                  Signup
-                </h1>
-                <div className=" flex justify-start items-center gap-x-5 mb-5">
-                  <input
-                    type="file"
-                    id="image"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="hidden"
-                  />
+    <div className="w-full col-span-1 md:col-span-2 ">
+      <div className="flex items-center justify-center w-full md:w-3/4 mt-5">
+        <div>
+          <form className="w-full" onSubmit={formik.handleSubmit}>
+            <h1 className="text-customBlue900 font-bold mb-12 text-2xl text-center mt-5">
+              Signup
+            </h1>
+            <div className=" flex justify-start items-center gap-x-5 mb-5">
+              <input
+                type="file"
+                id="image"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+              />
 
-                  <div
-                    onClick={triggerFileInput}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm block flex items-center justify-center cursor-pointer  w-20 h-20 rounded-full"
-                  >
-                    {selectedImage ? (
-                      <img
-                        src={selectedImage}
-                        alt="Uploaded"
-                        className="h-full w-full object-cover rounded-lg"
-                      />
-                    ) : (
-                      <div className="">
-                        <img src={avatar} alt="upload-icon" className=" mb-3" />
-                      </div>
-                    )}
+              <div
+                onClick={triggerFileInput}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm block flex items-center justify-center cursor-pointer  w-20 h-20 rounded-full"
+              >
+                {selectedImage ? (
+                  <img
+                    src={selectedImage}
+                    alt="Uploaded"
+                    className="h-full w-full object-cover rounded-lg"
+                  />
+                ) : (
+                  <div className="">
+                    <img src={avatar} alt="upload-icon" className=" mb-3" />
                   </div>
-                  {formik.errors.image && formik.touched.image ? (
-                    <div className="bg-teal-500 text-white p-2 my-1 text-sm rounded-lg">
-                      {formik.errors.image}
-                    </div>
-                  ) : null}
-                  <button
-                    type="button"
-                    className="text-white mt-5 bg-customBlue900 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded text-xs px-4 py-2.5 dark:bg-customBlue600 dark:hover:bg-customBlue300 hover:bg-customBlue300"
-                    onClick={triggerFileInput}
-                  >
-                    Upload Photo
-                  </button>
+                )}
+              </div>
+              {formik.errors.image && formik.touched.image ? (
+                <div className="bg-teal-500 text-white p-2 my-1 text-sm rounded-lg">
+                  {formik.errors.image}
                 </div>
+              ) : null}
+              <button
+                type="button"
+                className="text-white mt-5 bg-customBlue900 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded text-xs px-4 py-2.5 dark:bg-customBlue600 dark:hover:bg-customBlue300 hover:bg-customBlue300"
+                onClick={triggerFileInput}
+              >
+                Upload Photo
+              </button>
+            </div>
 
-                <div className="grid grid-cols-2 gap-x-3">
-                  <div className="mb-2">
-                    <label
-                      htmlFor="firstName"
-                      className="block mb-2 text-sm font-medium text-gray-500"
-                    >
-                      First Name
-                    </label>
-                    <input
-                      type="text"
-                      id="firstName"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.firstName}
-                      className={`bg-gray-50 border ${
-                        formik.errors.firstName && formik.touched.firstName
-                          ? "border-red-500"
-                          : "border-gray-300"
-                      } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-customBlue700 block w-full p-2.5`}
-                    />
-                    {formik.errors.firstName && formik.touched.firstName && (
-                      <p className="bg-teal-500 text-white p-2 my-1 text-sm rounded-lg">
-                        {formik.errors.firstName}
-                      </p>
-                    )}
-                  </div>
-                  <div className="mb-2">
-                    <label
-                      htmlFor="lastName"
-                      className="block mb-2 text-sm font-medium text-gray-500"
-                    >
-                      Last Name
-                    </label>
-                    <input
-                      type="text"
-                      id="lastName"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.lastName}
-                      className={`bg-gray-50 border ${
-                        formik.errors.lastName && formik.touched.lastName
-                          ? "border-red-500"
-                          : "border-gray-300"
-                      } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-customBlue700 block w-full p-2.5`}
-                    />
-                    {formik.errors.lastName && formik.touched.lastName && (
-                      <p className="bg-teal-500 text-white p-2 my-1 text-sm rounded-lg">
-                        {formik.errors.lastName}
-                      </p>
-                    )}
-                  </div>
+            <div className="grid grid-cols-2 gap-x-3">
+              <div className="mb-2">
+                <label
+                  htmlFor="firstName"
+                  className="block mb-2 text-sm font-medium text-gray-500"
+                >
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.firstName}
+                  className={`bg-gray-50 border ${
+                    formik.errors.firstName && formik.touched.firstName
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-customBlue700 block w-full p-2.5`}
+                />
+                {formik.errors.firstName && formik.touched.firstName && (
+                  <p className="bg-teal-500 text-white p-2 my-1 text-sm rounded-lg">
+                    {formik.errors.firstName}
+                  </p>
+                )}
+              </div>
+              <div className="mb-2">
+                <label
+                  htmlFor="lastName"
+                  className="block mb-2 text-sm font-medium text-gray-500"
+                >
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  id="lastName"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.lastName}
+                  className={`bg-gray-50 border ${
+                    formik.errors.lastName && formik.touched.lastName
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-customBlue700 block w-full p-2.5`}
+                />
+                {formik.errors.lastName && formik.touched.lastName && (
+                  <p className="bg-teal-500 text-white p-2 my-1 text-sm rounded-lg">
+                    {formik.errors.lastName}
+                  </p>
+                )}
+              </div>
+            </div>
+            <div className="mb-2">
+              <label
+                htmlFor="email"
+                className="block mb-2 text-sm font-medium text-gray-500"
+              >
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.email}
+                className={`bg-gray-50 border ${
+                  formik.errors.email && formik.touched.email
+                    ? "border-red-500"
+                    : "border-gray-300"
+                } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-customBlue700 block w-full p-2.5`}
+              />
+              {formik.errors.email && formik.touched.email && (
+                <p className="bg-teal-500 text-white p-2 my-1 text-sm rounded-lg">
+                  {formik.errors.email}
+                </p>
+              )}
+            </div>
+            <div className="mb-2">
+              <label
+                htmlFor="password"
+                className="block mb-2 text-sm font-medium text-gray-500"
+              >
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.password}
+                className={`bg-gray-50 border ${
+                  formik.errors.password && formik.touched.password
+                    ? "border-red-500"
+                    : "border-gray-300"
+                } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-customBlue700 block w-full p-2.5`}
+              />
+              {formik.errors.password && formik.touched.password && (
+                <div className="w-full">
+                  <p className="bg-teal-500 text-white p-2 my-1 text-sm rounded-lg w-full">
+                    {formik.errors.password}
+                  </p>
                 </div>
-                <div className="mb-2">
-                  <label
-                    htmlFor="email"
-                    className="block mb-2 text-sm font-medium text-gray-500"
-                  >
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.email}
-                    className={`bg-gray-50 border ${
-                      formik.errors.email && formik.touched.email
-                        ? "border-red-500"
-                        : "border-gray-300"
-                    } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-customBlue700 block w-full p-2.5`}
-                  />
-                  {formik.errors.email && formik.touched.email && (
-                    <p className="bg-teal-500 text-white p-2 my-1 text-sm rounded-lg">
-                      {formik.errors.email}
-                    </p>
-                  )}
-                </div>
-                <div className="mb-2">
-                  <label
-                    htmlFor="password"
-                    className="block mb-2 text-sm font-medium text-gray-500"
-                  >
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    id="password"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.password}
-                    className={`bg-gray-50 border ${
-                      formik.errors.password && formik.touched.password
-                        ? "border-red-500"
-                        : "border-gray-300"
-                    } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-customBlue700 block w-full p-2.5`}
-                  />
-                  {formik.errors.password && formik.touched.password && (
-                    <div className="w-full">
-                      <p className="bg-teal-500 text-white p-2 my-1 text-sm rounded-lg w-full">
-                        {formik.errors.password}
-                      </p>
-                    </div>
-                  )}
-                </div>
-                {/* confirm password */}
-                {/* <div className="mb-2">
+              )}
+            </div>
+            {/* confirm password */}
+            {/* <div className="mb-2">
                   <label
                     htmlFor="confirmPassword"
                     className="block mb-2 text-sm font-medium text-gray-500"
@@ -299,30 +292,28 @@ export default function SignUp() {
                     )}
                 </div> */}
 
-                <button
-                  type="submit"
-                  disabled={loading} // Disable the button when submitting
-                  className="text-white bg-customBlue900 hover:bg-customBlue600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-4 w-full"
-                >
-                  {loading ? (
-                    <>
-                      <i className="fas fa-spinner fa-spin mx-2 white-icon"></i>
-                      {/* <span>Loading...</span> */}
-                    </>
-                  ) : (
-                    <span>Signup</span>
-                  )}
-                </button>
-              </form>
-              <div className="flex justify-center items-center">
-                <p className="text-gray-500 mt-10">
-                  Already Have an account?{" "}
-                  <Link to={"/login"} className="text-customBlue900 font-bold">
-                    Login
-                  </Link>
-                </p>
-              </div>
-            </div>
+            <button
+              type="submit"
+              disabled={loading} // Disable the button when submitting
+              className="text-white bg-customBlue900 hover:bg-customBlue600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-4 w-full"
+            >
+              {loading ? (
+                <>
+                  <i className="fas fa-spinner fa-spin mx-2 white-icon"></i>
+                  {/* <span>Loading...</span> */}
+                </>
+              ) : (
+                <span>Signup</span>
+              )}
+            </button>
+          </form>
+          <div className="flex justify-center items-center">
+            <p className="text-gray-500 mt-10">
+              Already Have an account?{" "}
+              <Link to={"/login"} className="text-customBlue900 font-bold">
+                Login
+              </Link>
+            </p>
           </div>
         </div>
       </div>
