@@ -1,140 +1,263 @@
-import React from 'react'
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  Label,
+} from "recharts";
+import axios from "axios";
+import AnalyticButton from "../components/analyticButton";
+import checkIcon from "../assets/checkIcon.svg";
+import alarmIcon from "../assets/alarmIcon.svg";
+import progressIcon from "../assets/progressIcon.svg";
 
-export default function Analytics() {
+import { useEffect, useState } from "react";
+import Loading from "../components/Loading";
+const PIRCOLORS = ["#0E9F6E", "#FACA15", "#F05252"];
+const STATCOLORS = ["#98ABFF", "#546FFF", "#10197A"];
+const CATCOLORS = [
+  "#3D53DB",
+  "#2A3BB7",
+  "#1A2793",
+  "#546FFF",
+  "#9F84FD",
+  "#98ABFF",
+];
+
+function Analytics() {
+  const [taskStats, setTaskStats] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchTaskStats = async () => {
+      try {
+        const response = await axios.get(
+          "https://task-management-depi.vercel.app/api/tasks/stats",
+          {
+            headers: {
+              token: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzBjMTFkMjExZDE5ZjkxYTA4N2EyOGMiLCJpYXQiOjE3Mjg5MzMwMzcsImV4cCI6MTcyOTAxOTQzN30.PMmDa1LGZziTpRS4d5Sse3ixYnhHpExfT1bCI3f-RdY`,
+            },
+          }
+        );
+        // console.log(response.data);
+
+        setTaskStats(response.data.stats);
+        setLoading(false);
+      } catch (err) {
+        setError("Failed to fetch task stats");
+        setLoading(false);
+      }
+    };
+
+    fetchTaskStats();
+  }, []);
+
+  if (loading) {
+    return <Loading/>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (!taskStats) {
+    return <div>No stats available</div>;
+  }
+
+  // Extract stats data
+  const { statusStats, priorityStats, categoryStats, tasksByDate } = taskStats;
+
+  // Prepare Data for Recharts
+  const statusData = [
+    { name: "Completed", value: statusStats?.completed },
+    { name: "In Progress", value: statusStats?.inProgress },
+    { name: "Pending", value: statusStats?.pending },
+  ];
+
+  const priorityData = [
+    { name: "High", value: priorityStats?.highPriority },
+    { name: "Medium", value: priorityStats?.mediumPriority },
+    { name: "Low", value: priorityStats?.lowPriority },
+  ];
+
+  const categoryData = categoryStats?.map((cat) => ({
+    name: cat._id,
+    value: cat.count,
+  }));
+
+  const tasksByDateData = tasksByDate?.map((date) => ({
+    date: date._id,
+    count: date.count,
+  }));
+
   return (
-<>
-<div className="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
-  <div className="flex justify-between">
-    <div>
-      <h5 className="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">
-        32.4k
-      </h5>
-      <p className="text-base font-normal text-gray-500 dark:text-gray-400">
-        Users this week
-      </p>
-    </div>
-    <div className="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 dark:text-green-500 text-center">
-      12%
-      <svg
-        className="w-3 h-3 ms-1"
-        aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 10 14"
-      >
-        <path
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M5 13V1m0 0L1 5m4-4 4 4"
-        />
-      </svg>
-    </div>
-  </div>
-  <div id="area-chart" />
-  <div className="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
-    <div className="flex justify-between items-center pt-5">
-      {/* Button */}
-      <button
-        id="dropdownDefaultButton"
-        data-dropdown-toggle="lastDaysdropdown"
-        data-dropdown-placement="bottom"
-        className="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 text-center inline-flex items-center dark:hover:text-white"
-        type="button"
-      >
-        Last 7 days
-        <svg
-          className="w-2.5 m-2.5 ms-1.5"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 10 6"
-        >
-          <path
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="m1 1 4 4 4-4"
-          />
-        </svg>
-      </button>
-      {/* Dropdown menu */}
-      <div
-        id="lastDaysdropdown"
-        className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
-      >
-        <ul
-          className="py-2 text-sm text-gray-700 dark:text-gray-200"
-          aria-labelledby="dropdownDefaultButton"
-        >
-          <li>
-            <a
-              href="#"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Yesterday
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Today
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Last 7 days
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Last 30 days
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              Last 90 days
-            </a>
-          </li>
-        </ul>
-      </div>
-      <a
-        href="#"
-        className="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2"
-      >
-        Users Report
-        <svg
-          className="w-2.5 h-2.5 ms-1.5 rtl:rotate-180"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 6 10"
-        >
-          <path
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="m1 9 4-4-4-4"
-          />
-        </svg>
-      </a>
-    </div>
-  </div>
-</div>
+    <div className="task-stats-dashboard">
+      <h2 className="font-bold text-customBlue900 text-xl m-2">
+        Task Stats Dashboard
+      </h2>
 
-</>  )
+      {/* Statistic cards */}
+
+      <div className="flex flex-wrap ">
+        <AnalyticButton
+          imgSrc={checkIcon} // Pass the imported SVG as a prop
+          title="Total Tasks"
+          number={27}
+          bgColor={"bg-customBlue500"}
+        />
+
+        <AnalyticButton
+          imgSrc={alarmIcon} // Pass the imported SVG as a prop
+          title="Pending"
+          number={5}
+          bgColor={"bg-[#7E95FF]"}
+        />
+
+        <AnalyticButton
+          imgSrc={progressIcon} // Pass the imported SVG as a prop
+          title="In Progress"
+          number={12}
+          bgColor={"bg-customBlue300"}
+        />
+
+        <AnalyticButton
+          imgSrc={checkIcon} // Pass the imported SVG as a prop
+          title="Completed"
+          number={10}
+          bgColor={"bg-customBlue200"}
+        />
+      </div>
+
+      {/* Grid */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-1 lg:grid-cols-2">
+        {/* Status Stats */}
+        <div className="chart-section border-2 rounded-lg">
+          <h3 className="font-bold text-lg text-customBlue900/75 m-4">
+            Status Breakdown
+          </h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart
+              data={statusData}
+              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              {/* <Legend
+                formatter={(value, entry, index) => (
+                  <span
+                    style={{ color: STATCOLORS[index % STATCOLORS.length] }}
+                  >
+                    {statusData[index].name}{" "}
+                  </span>
+                )}
+              />  */}
+
+              <Bar data={statusData} dataKey={"value"}>
+                {statusData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={STATCOLORS[index % STATCOLORS.length]}
+                  />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Priority Stats */}
+        <div className="chart-section border-2 rounded-lg">
+          <h3 className="font-bold text-lg text-customBlue900/75 m-4">
+            Priority Breakdown
+          </h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                // paddingAngle={1}
+                data={priorityData}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={({ name, percent }) =>
+                  ` ${name} (${(percent * 100).toFixed(0)}%)`
+                }
+                outerRadius={100}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {priorityData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={PIRCOLORS[index % PIRCOLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Category Stats */}
+        <div className="chart-section border-2 rounded-lg">
+          <h3 className="font-bold text-lg text-customBlue900/75 m-4">
+            Task Categories
+          </h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart
+              data={categoryData}
+              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+
+              <Bar dataKey="value">
+                {categoryData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={CATCOLORS[index % CATCOLORS.length]}
+                  />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Tasks by Date */}
+        <div className="chart-section border-2 rounded-lg">
+          <h3 className="font-bold text-lg text-customBlue900/75 m-4">
+            Tasks Created Over Time
+          </h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart
+              data={tasksByDateData}
+              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="count" stroke="#8e44ad" />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </div>
+  );
 }
+
+export default Analytics;

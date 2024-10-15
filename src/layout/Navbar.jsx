@@ -31,7 +31,7 @@ export default function Navbar() {
               </div>
 
               {/* notifications */}
-              <div className='flex-shrink-0'>
+              <div className='flex-shrink-0 mt-2'>
               <Notifications/>
               </div>
 

@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 
 
 export default function Notifications() {
-  const [readmark, setReadmark] = useState('bg-[#fef65b]');
+  const [readmark, setReadmark] = useState('bg-customlight');
 
   const {notifications, loading, error} = useSelector((state)=>state.notifications);
   const dispatch = useDispatch();
@@ -34,9 +34,9 @@ export default function Notifications() {
             <PopoverPanel
               transition
               anchor="bottom"
-              className={`divide-y divide-white/5 mt-2 rounded-lg border bg-[#fef65b] text-sm/6 transition duration-200 ease-in-out data-[closed]:-translate-y-1 data-[closed]:opacity-0 z-40 ${notifications.length === 0 ? 'h-1/5' : 'h-1/2'} `} >
+              className={`divide-y divide-white/5 mt-2 rounded-lg border bg-customlight text-sm/6 transition duration-200 ease-in-out data-[closed]:-translate-y-1 data-[closed]:opacity-0 z-40 ${notifications.length === 0 ? 'h-1/5' : 'h-1/2'} `} >
 
-              <div className="p-3 mb-2 bg-[#fef65b]">
+              <div className="p-3 mb-2 bg-customlight">
                 {notifications.length > 0 ? (
                   <>
                     {notifications.map((notifi, index) => {
@@ -55,7 +55,7 @@ export default function Notifications() {
                       );
                     })}
                     {/* Mark As Read Button */}
-                    <div className="p-3 text-center font-bold text-black border-5 hover:bg-darkest hover:text-white sticky bottom-0 bg-[#fef65b]">
+                    <div className="p-3 text-center font-bold text-black border-5 hover:bg-darkest hover:text-white sticky bottom-0 bg-customBlue800">
                       <button onClick={() => { setReadmark('bg-white'); }}>
                         Mark all as read
                       </button>
