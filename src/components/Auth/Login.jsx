@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../../redux/reducers/authSlice";
+import { loginUser } from "../../store/reducers/authSlice";
 import notify from "../../hooks/useNotification";
 
 import LeftBanner from "../LeftBanner";

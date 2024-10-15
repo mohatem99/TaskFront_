@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { verifyOtp } from "../../redux/reducers/authSlice";
+import { verifyOtp } from "../../store/reducers/authSlice";
 
 export default function CheckEmail() {
   const dispatch = useDispatch();

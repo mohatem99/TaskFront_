@@ -119,7 +119,7 @@ export function SideBarComponent() {
                     <path d="M16.5 19.5V7.5C9.87333 7.5 4.5 12.8733 4.5 19.5C4.5 26.1267 9.87333 31.5 16.5 31.5C23.1267 31.5 28.5 26.1267 28.5 19.5H16.5Z" fill="currentColor"/>
                     <path d="M18 18H31.5C31.5 10.5412 25.4588 4.5 18 4.5V18Z" fill="#7E95FF"/>
                   </svg>
-                  <span className="ms-3 font-bold">analytics</span>
+                  <span className="ms-3 font-bold">Analytics</span>
                 </Link>
             </li>
             <li>
@@ -164,7 +164,7 @@ export function SideBarComponent() {
               <Link
                 to="/passwordsetting"
                 className={`mb-4 flex items-center p-2 group ${
-                  isActive("/passwordsetting")
+                  isActive("/passwordsetting") || isActive("/profilesetting")
                     ? "bg-darkest dark:bg-gray-600 text-white rounded-r-lg"
                     : "text-darkest dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                 }`}

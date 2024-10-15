@@ -2,7 +2,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import notify from "../hooks/useNotification";
 import { useDispatch } from "react-redux";
-import { profileData,updateLoggedUser } from '../redux/reducers/userSlice';
+import { profileData,updateLoggedUser } from '../store/reducers/userSlice';
 
 
 export default function PasswordSettings() {

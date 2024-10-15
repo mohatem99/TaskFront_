@@ -2,7 +2,7 @@ import avatar from '../assets/Avatar.png';
 import { useState,useEffect,useRef } from 'react';
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { profileData,updateLoggedUser } from '../redux/reducers/userSlice';
+import { profileData,updateLoggedUser } from '../store/reducers/userSlice';
 import {useDispatch,useSelector } from 'react-redux';
 import notify from '../hooks/useNotification';
 import Cookies from 'js-cookie';

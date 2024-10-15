@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addCategory } from '../../redux/reducers/categoriesSlice';
+import { addCategory } from '../../store/reducers/categoriesSlice';
 
 
 export default function AddCategoryForm({ onClose }) {

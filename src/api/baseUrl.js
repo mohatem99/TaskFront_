@@ -4,4 +4,4 @@ const api = axios.create({
   baseURL: 'https://task-management-depi.vercel.app/api',
 });
 
-export default  api
+export default  api;

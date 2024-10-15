@@ -2,7 +2,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser } from "../../redux/reducers/authSlice";
+import { registerUser } from "../../store/reducers/authSlice";
 import notify from "../../hooks/useNotification";
 import LeftBanner from "../LeftBanner";
 import { Link, useNavigate } from "react-router-dom";

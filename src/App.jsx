@@ -1,26 +1,31 @@
-import Login from "./components/Auth/Login";
 
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { SideBarComponent } from "./components/layout/SidbarComponent";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
 import Layout from "./components/layout/Layout";
 import SettLayout from "./components/layout/SettLayout";
-import Analytics from "./pages/Analytics";
 
-import Dashboard from "./pages/Dashboard";
 import Landing from "./pages/Landing";
+import Auth from "./components/layout/Auth";
 import AuthGuard from "./guard/AuthGuard";
+import Login from "./components/Auth/Login";
+import SignUp from "./components/Auth/SignUp"
+
 import ForgetPass from "./components/Auth/ForgetPass";
 import CheckEmail from "./components/Auth/CheckEmail";
 import NewPass from "./components/Auth/NewPass";
-import Auth from "./components/layout/Auth";
+
+import Analytics from "./pages/Analytics";
+import Dashboard from "./pages/Dashboard";
+import TaskForm from "./components/taskComponents/TaskForm";
+import Tasks from "./pages/Tasks"
+
 import ProfileSettings from "./pages/ProfileSettings";
 import PasswordSettings from "./pages/PasswordSettings";
 import AppearanceSettings from "./pages/AppearanceSettings";
-import SignUp from "./components/Auth/SignUp"
-import TaskForm from "./components/taskComponents/TaskForm";
-import Tasks from "./pages/Tasks"
+
 
 let router = createBrowserRouter([
   {

@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchCategoryById } from '../../redux/reducers/categoriesSlice';
+import { fetchCategoryById } from '../../store/reducers/categoriesSlice';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
-import { updateCategory } from '../../redux/reducers/categoriesSlice';
+import { updateCategory } from '../../store/reducers/categoriesSlice';
 
 
 export default function EditCategoryModal({ onClose, categoryId }) {

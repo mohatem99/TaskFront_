@@ -1,6 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function SearchAdd() {
+  const navigate = useNavigate();
   return (
     <>
       {/* Search */}
@@ -34,7 +36,7 @@ export default function SearchAdd() {
         <div className="relative hidden md:block">
           <div className="absolute inset-y-1 m-2 lg:mb-4 md:mb-9 start-5 flex items-center ps-4 pointer-events-none">
             <svg
-              className="w-4 h-4 text-gray-500 dark:text-gray-400 m"
+              className="w-4 h-4 text-gray-500 dark:text-gray-400 "
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -62,6 +64,7 @@ export default function SearchAdd() {
         <div className="ml-7">
           <button
             type="button"
+            onClick={()=>navigator("/create-task")}
             className="text-white bg-darkest hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
             aria-label="Add task"
           >

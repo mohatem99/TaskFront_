@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast';
 import editImg from '../../assets/edit.svg';
 import trashImg from '../../assets/trash.svg';
-import { removeTask } from '../../redux/reducers/tasksSlice';
+import { removeTask } from '../../store/reducers/tasksSlice';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { IoMdCalendar } from 'react-icons/io'

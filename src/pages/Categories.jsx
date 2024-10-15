@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Loading from '../components/Loading';
 import AddCategoryForm from '../components/AddCategoryForm';
 import EditCategoryModal from '../components/EditCategoryModal';
-import { fetchCategories, removeCategory, updateCategory } from '../redux/reducers/categoriesSlice';
+import { fetchCategories, removeCategory, updateCategory } from '../store/reducers/categoriesSlice';
 import { IoMdAdd } from 'react-icons/io';
 
 export default function Categories() {

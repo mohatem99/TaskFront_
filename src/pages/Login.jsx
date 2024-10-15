@@ -2,7 +2,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loginUser } from "../redux/reducers/authSlice";
+import { loginUser } from "../store/reducers/authSlice";
 import notify from "../hooks/useNotification";
 import LeftBanner from "../components/LeftBanner"
 import { Link } from "react-router-dom";

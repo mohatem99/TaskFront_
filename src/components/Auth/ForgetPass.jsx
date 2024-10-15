@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import LeftBanner from "../LeftBanner";
-import { forgetPassword } from "../../redux/reducers/authSlice";
+import { forgetPassword } from "../../store/reducers/authSlice";
 
 import notify from "../../hooks/useNotification";
 

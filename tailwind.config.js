@@ -25,7 +25,7 @@ export default {
       },
     },
 
-    borderRadius: { lg: "16px" },
+    borderRadius: { lg: "10px" },
   },
   plugins: [flowbite.plugin()],
 };
