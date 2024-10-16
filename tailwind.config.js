@@ -1,7 +1,10 @@
-/** @type {import('tailwindcss').Config} */
-const flowbite = require("flowbite-react/tailwind");
 export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}", flowbite.content()],
+  darkMode: "class",
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/flowbite/**/*.js",
+  ],
   theme: {
     extend: {
       colors: {
@@ -21,11 +24,12 @@ export default {
         lightyellow: "#FEFB96",
       },
       fontFamily: {
-        sans: ["Montserrat", "system-ui", "sans-serif"],
+        montserrat: ["Montserrat", "sans-serif"], // Add Montserrat font
       },
+      borderRadius:{
+        lg: '14px'
+      }
     },
-
-    borderRadius: { lg: "10px" },
   },
-  plugins: [flowbite.plugin()],
+  plugins: [require("flowbite/plugin")],
 };

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchCategoryById } from '../../store/reducers/categoriesSlice';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import { updateCategory } from '../../store/reducers/categoriesSlice';
@@ -8,32 +7,19 @@ import { updateCategory } from '../../store/reducers/categoriesSlice';
 
 export default function EditCategoryModal({ onClose, categoryId }) {
     const dispatch = useDispatch();
-    const { category, loading } = useSelector((state) => state.categories);
+    const Cat = useSelector(store=>store.categories.categories.find(cat=>cat._id === categoryId))
     const [categoryName, setCategoryName] = useState('');
 
-    useEffect(() => {
-        if (categoryId && !category) {  // Only fetch if categoryId is present and category is not already loaded
-            dispatch(fetchCategoryById(categoryId));
-        }
-        
-    }, [dispatch, categoryId, category]);
-
-    useEffect(() => {
-        if (category && category.name) {
-            setCategoryName(category.name); // Set the category name in the input when data is fetched
-        }
-        
-    }, [category]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         dispatch(updateCategory({ id: categoryId, name: categoryName }));
-        onClose(); // Close the modal after updating
+        onClose();
 
     };
 
     const handleCancel = () => {
-        onClose(); // Close modal without saving changes
+        onClose(); 
     };
 
     return (
@@ -48,7 +34,7 @@ export default function EditCategoryModal({ onClose, categoryId }) {
                         </label>
                         <input
                             type="text"
-                            value={categoryName}
+                            defaultValue={Cat.name}
                             onChange={(e) => setCategoryName(e.target.value)}
                             className="w-full px-4 py-2 border border-gray-300 focus:outline-customBlue900  rounded-lg"
                             placeholder="Enter category name"

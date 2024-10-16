@@ -1,6 +1,5 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import api from '../../api/baseUrl';
-
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import api from "../../api/baseUrl";
 
 const initialState = {
   categories: [],
@@ -10,25 +9,12 @@ const initialState = {
 };
 
 export const fetchCategoryById = createAsyncThunk(
-  'categories/fetchCategoryById', async (categoryId, { getState, rejectWithValue }) => {
+  "categories/fetchCategoryById",
+  async (categoryId, { getState, rejectWithValue }) => {
     try {
       const token = getState().auth.token;
-      const config = { headers: { token: `Bearer ${token}` }, };
+      const config = { headers: { token: `Bearer ${token}` } };
       const response = await api.get(`/categories/${categoryId}`, config);
-      console.log(response , categoryId)
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-)
-
-export const fetchCategories = createAsyncThunk(
-  'categories/fetchCategories', async (_, { getState, rejectWithValue }) => {
-    try {
-      const token = getState().auth.token;
-      const config = { headers: { token: `Bearer ${token}` }, };
-      const response = await api.get('/categories', config);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -36,14 +22,27 @@ export const fetchCategories = createAsyncThunk(
   }
 );
 
+export const fetchCategories = createAsyncThunk(
+  "categories/fetchCategories",
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token;
+      const config = { headers: { token: `Bearer ${token}` } };
+      const response = await api.get("/categories", config);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 export const addCategory = createAsyncThunk(
-  'categories/addCategory',
+  "categories/addCategory",
   async (category, { getState, rejectWithValue }) => {
     try {
       const token = getState().auth.token;
-      const config = { headers: { token: `Bearer ${token}` }, };
-      const response = await api.post('/categories', category, config);
+      const config = { headers: { token: `Bearer ${token}` } };
+      const response = await api.post("/categories", category, config);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -52,11 +51,11 @@ export const addCategory = createAsyncThunk(
 );
 
 export const removeCategory = createAsyncThunk(
-  'categories/removeCategory',
+  "categories/removeCategory",
   async (categoryId, { getState, rejectWithValue }) => {
     try {
       const token = getState().auth.token;
-      const config = { headers: { token: `Bearer ${token}` }, };
+      const config = { headers: { token: `Bearer ${token}` } };
       await api.delete(`/categories/${categoryId}`, config);
       return categoryId;
     } catch (error) {
@@ -66,13 +65,16 @@ export const removeCategory = createAsyncThunk(
 );
 
 export const updateCategory = createAsyncThunk(
-  'categories/updateCategory',
-  async (category, {getState , rejectWithValue }) => {
+  "categories/updateCategory",
+  async (category, { getState, rejectWithValue }) => {
     try {
       const token = getState().auth.token;
-      const config = { headers: { token: `Bearer ${token}` }, };
-      const response = await api.put(`/categories/${category.id}`, {name : category.name} , config);
-      console.log(response)
+      const config = { headers: { token: `Bearer ${token}` } };
+      const response = await api.put(
+        `/categories/${category.id}`,
+        { name: category.name },
+        config
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -81,7 +83,7 @@ export const updateCategory = createAsyncThunk(
 );
 
 const categoriesSlice = createSlice({
-  name: 'categories',
+  name: "categories",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -128,7 +130,9 @@ const categoriesSlice = createSlice({
       })
       .addCase(removeCategory.fulfilled, (state, action) => {
         state.loading = false;
-        state.categories = state.categories.filter((category) => category._id != action.payload);
+        state.categories = state.categories.filter(
+          (category) => category._id != action.payload
+        );
       })
       .addCase(removeCategory.rejected, (state, action) => {
         state.loading = false;
@@ -140,19 +144,17 @@ const categoriesSlice = createSlice({
       })
       .addCase(updateCategory.fulfilled, (state, action) => {
         state.loading = false;
-        state.categories = state.categories.map(element => {return element._id == action.payload.newCategory?._id? action.payload.newCategory : element})
-        
-        // const index = state.categories.findIndex((category) => category.id === action.payload.newCategory);
-        // if (index !== -1) {
-        //   state.categories[index] = action.payload.newCategory;
-        // }
+        state.categories = state.categories.map((element) => {
+          return element._id == action.payload.newCategory?._id
+            ? action.payload.newCategory
+            : element;
+        });
       })
       .addCase(updateCategory.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
   },
-
 });
 
 export default categoriesSlice.reducer;

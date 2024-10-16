@@ -149,14 +149,14 @@ const triggerFileInput = () => {
                   ) : null}
                           <button 
           type="button" 
-          className="text-white mt-5 bg-customBlue900 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded text-xs px-4 py-2.5 dark:bg-customBlue600 dark:hover:bg-customBlue300 hover:bg-customBlue300"
+          className="text-white mt-5 bg-customBlue900 focus:outline-none focus:ring-4 focus:ring-blue-300 font-semibold rounded-lg text-sm px-4 py-2.5 dark:bg-customBlue600 dark:hover:bg-customBlue300 hover:bg-customBlue300"
           onClick={triggerFileInput}
         >
           Upload Photo
         </button>
         <button 
           type="button" 
-          className="text-customBlue900 mt-5 bg-customGray focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded text-xs px-4 py-2.5 dark:bg-gray-600 dark:hover:bg-gray-300 dark:text-white hover:bg-gray-500 hover:text-white"
+          className="text-customBlue900 mt-5 bg-customGray focus:outline-none focus:ring-4 focus:ring-blue-300 font-semibold rounded-lg text-sm px-4 py-2.5 dark:bg-gray-600 dark:hover:bg-gray-300 dark:text-white hover:bg-gray-500 hover:text-white"
           onClick={handleImageDelete}
         >
           Delete Photo
@@ -253,13 +253,13 @@ const triggerFileInput = () => {
           <div className='col-span-2 flex justify-end mt-5'>
             <button 
               type="button" 
-              className="text-customBlue900 bg-customGray focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded text-xs px-4 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-300 dark:focus:ring-blue-800 mr-2 dark:text-white hover:bg-gray-500 hover:text-white"
+              className="text-customBlue900 bg-customGray focus:outline-none focus:ring-4 focus:ring-blue-300 font-semibold rounded-lg text-sm px-4 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-300 dark:focus:ring-blue-800 mr-2 dark:text-white hover:bg-gray-500 hover:text-white"
             >
               Cancel
             </button>
             <button 
               type="submit" 
-              className={`text-white bg-customBlue900 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded text-xs px-4 py-2.5 text-center dark:bg-customBlue600 dark:hover:bg-customBlue300 dark:focus:ring-blue-800 hover:bg-customBlue300${
+              className={`text-white bg-customBlue900 focus:outline-none focus:ring-4 focus:ring-blue-300 font-semibold rounded-lg text-sm px-4 py-2.5 text-center dark:bg-customBlue600 dark:hover:bg-customBlue300 dark:focus:ring-blue-800 hover:bg-customBlue300${
                 formik.isSubmitting ? "opacity-50 cursor-not-allowed" : ""
               }`}
               disabled={formik.isSubmitting}

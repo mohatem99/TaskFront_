@@ -1,7 +1,6 @@
 
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import { SideBarComponent } from "./components/layout/SidbarComponent";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Layout from "./components/layout/Layout";
@@ -17,125 +16,66 @@ import ForgetPass from "./components/Auth/ForgetPass";
 import CheckEmail from "./components/Auth/CheckEmail";
 import NewPass from "./components/Auth/NewPass";
 
-import Analytics from "./pages/Analytics";
+
 import Dashboard from "./pages/Dashboard";
 import TaskForm from "./components/taskComponents/TaskForm";
 import Tasks from "./pages/Tasks"
+import EditTaskModal from './components/taskComponents/EditTaskModal';
+import Categories from './pages/Categories';
+
 
 import ProfileSettings from "./pages/ProfileSettings";
 import PasswordSettings from "./pages/PasswordSettings";
 import AppearanceSettings from "./pages/AppearanceSettings";
 
 
-let router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Auth />,
-    children: [
-      {
-        index: true,
-        element: (
-          <AuthGuard>
-            <Landing />
-          </AuthGuard>
-        ),
-      },
-
-      { path: "login", element: <Login /> },
-      { path: "signup", element: <SignUp /> },
-      { path: "forget-pass", element: <ForgetPass /> },
-      { path: "check-email", element: <CheckEmail /> },
-      { path: "new-pass", element: <NewPass /> },
-    ],
-  },
-
-
-
-  {
-    path: "/dashboard",
-    element: <Layout />,
-    children: [
-      {
-        index: true,
-        element: <Dashboard />,
-      },
-    ],
-  },
-
-  {
-    path: "/analytics",
-    element: <Layout />,
-    children: [
-      {
-        index: true,
-        element: <Analytics />,
-      },
-    ],
-  },
-
-  {
-    path: "/create-task",
-    element: <Layout />,
-    children: [
-      {
-        index: true,
-        element: <TaskForm />,
-      },
-    ],
-  },
-
-  {
-    path: "/profilesetting",
-    element: <SettLayout />,
-    children: [
-      {
-        index: true,
-        element: <ProfileSettings />,
-      },
-    ],
-  },
-
-  {
-    path: "/passwordsetting",
-    element: <SettLayout />,
-    children: [
-      {
-        index: true,
-        element: <PasswordSettings />,
-      },
-    ],
-  },
-
-  {
-    path: "/appearancesetting",
-    element: <SettLayout />,
-    children: [
-      {
-        index: true,
-        element: <AppearanceSettings />,
-      },
-    ],
-  },
-
-  {
-    path: "/tasks",
-    element: <Layout />,
-    children: [
-      {
-        index: true,
-        element: <Tasks />,
-      },
-    ],
-  },
-]);
+import { Route, Routes } from "react-router-dom";
 
 function App() {
   return (
-    <>
-      <RouterProvider router={router} />
+    <main className="w-full min-h-screen ">
+    <Routes>
+        <Route path="/" element={<Layout />}>
+          {" "}
+          <Route
+            index
+            path="dashboard"
+            element={
+              <AuthGuard>
+                <Dashboard />
+              </AuthGuard>
+            }
+          />
+        </Route>
+
+        <Route path="/" element={<Auth />}>
+        <Route index path="/login" element={<Login />} />
+        <Route index path="/signup" element={<SignUp />} />
+        <Route index path= "forget-pass" element= {<ForgetPass /> }/>
+        <Route index path= "check-email" element= {<CheckEmail /> }/>
+        <Route index path= "new-pass" element= {<NewPass /> }/>   
+        </Route>
+
+
+        <Route  element={<Layout />}>
+            <Route  path="tasks" element={<Tasks />} />
+          <Route  path="create-task" element={<TaskForm />} />
+          <Route path="/edit-task/:id" element={<EditTaskModal />} />
+          <Route path="/categories" element={<Categories />} />
+          
+        </Route>        
+        
+        
+        
+        <Route  element={<SettLayout />}>
+          <Route  path="passwordsetting" element={<PasswordSettings />} />
+          <Route  path="profilesetting" element={<ProfileSettings />} />
+        </Route>
+
+      </Routes>
 
       <ToastContainer />
-    </>
+    </main>
   );
 }
 

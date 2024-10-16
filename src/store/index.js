@@ -1,16 +1,21 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore } from "@reduxjs/toolkit";
+import authSlice from "./reducers/authSlice";
+import notifySlice from "./reducers/notifySlice";
+import userSlice from './reducers/userSlice';
+import categoriesSlice from './reducers/categoriesSlice';
+import tasksSlice from './reducers/tasksSlice';
+import allusersSlice from './reducers/allusersSlice';
 
-import authReducer from './reducers/authSlice';
-import userReducer from './reducers/userSlice'
-import categoriesReducer from './reducers/categoriesSlice';
-import notificationsReducer from './reducers/notificationSlice';
-
-
-export const store = configureStore({
+const store = configureStore({
   reducer: {
-    auth: authReducer,
-    user: userReducer,
-    categories: categoriesReducer,
-    notifications: notificationsReducer,
-  }
+    auth: authSlice,
+    notify: notifySlice,
+    user: userSlice,
+    categories: categoriesSlice,
+    tasks: tasksSlice,
+    allusers: allusersSlice,
+
+  },
 });
+
+export default store;

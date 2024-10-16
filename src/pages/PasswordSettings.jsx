@@ -53,17 +53,15 @@ export default function PasswordSettings() {
 
   return (
     <div className="ml-4 md:ml-10 ">
-      <h2 className="text-customBlue900 font-bold mt-10 sm:mt-16 lg:mt-20 dark:text-customBlue100">
-        Profile Information
-      </h2>
-      <h3 className="text-customBlue900 font-bold my-4 sm:my-5 dark:text-customBlue100">
+
+      <h3 className="text-customBlue900 text-2xl font-bold my-4 sm:my-5 dark:text-customBlue100">
         Do You Want To Change Your Password?
       </h3>
       <form className="w-full sm:w-3/4 md:w-1/2 lg:w-[50%]" onSubmit={formik.handleSubmit}>
         <div className="mb-5">
           <label
             htmlFor="oldPassword"
-            className="block mb-2 text-sm font-medium text-customBlue900 dark:text-customBlue100"
+            className="block mb-2 font-medium text-customBlue900 dark:text-customBlue100"
           >
             Old Password
           </label>
@@ -85,7 +83,7 @@ export default function PasswordSettings() {
         <div className="mb-5">
           <label
             htmlFor="password"
-            className="block mb-2 text-sm font-medium text-customBlue900 dark:text-customBlue100"
+            className="block mb-2  font-medium text-customBlue900 dark:text-customBlue100"
           >
             New Password
           </label>
@@ -107,7 +105,7 @@ export default function PasswordSettings() {
         <div className="mb-5">
           <label
             htmlFor="confirmPassword"
-            className="block mb-2 text-sm font-medium text-customBlue900 dark:text-customBlue100"
+            className="block mb-2 font-medium text-customBlue900 dark:text-customBlue100"
           >
             Confirm New Password
           </label>
@@ -128,13 +126,13 @@ export default function PasswordSettings() {
         <div className="flex justify-end mt-5">
           <button
             type="button"
-            className="text-customBlue900 bg-customGray focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded text-xs px-4 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-300 dark:focus:ring-blue-800 mr-2 dark:text-white hover:bg-gray-500 hover:text-white"
+            className="text-customBlue900 bg-customGray focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-300 dark:focus:ring-blue-800 mr-2 dark:text-white hover:bg-gray-500 hover:text-white"
           >
             Cancel
           </button>
           <button
   type="submit"
-  className={`text-white bg-customBlue900 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded text-xs px-4 py-2.5 text-center dark:bg-customBlue600 dark:hover:bg-customBlue300 dark:focus:ring-blue-800 hover:bg-customBlue300 ${
+  className={`text-white  bg-customBlue900 focus:outline-none focus:ring-4 focus:ring-blue-300 font-semibold rounded-lg text-sm px-4 py-2.5 text-center dark:bg-customBlue600 dark:hover:bg-customBlue300 dark:focus:ring-blue-800 hover:bg-customBlue300 ${
     formik.isSubmitting ? "opacity-50 cursor-not-allowed" : ""
   }`}
   disabled={formik.isSubmitting}

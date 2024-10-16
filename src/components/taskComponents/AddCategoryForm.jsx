@@ -15,7 +15,7 @@ export default function AddCategoryForm({ onClose }) {
 
 
     const handleCancel = () => {
-        onClose(); // Close modal without adding a category
+        onClose(); 
     };
 
     return (

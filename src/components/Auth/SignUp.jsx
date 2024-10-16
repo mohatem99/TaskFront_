@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../../store/reducers/authSlice";
 import notify from "../../hooks/useNotification";
-import LeftBanner from "../LeftBanner";
+
 import { Link, useNavigate } from "react-router-dom";
 import avatar from "../../assets/Avatar.png";
 
@@ -12,7 +12,7 @@ export default function SignUp() {
   const [selectedImage, setSelectedImage] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error } = useSelector((state) => state.auth);
+  const { loading } = useSelector((state) => state.auth);
 
   // Validation schema with Yup
   const validationSchema = Yup.object({

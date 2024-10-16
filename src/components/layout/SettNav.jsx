@@ -2,14 +2,14 @@ import { NavLink } from "react-router-dom";
 
 export default function SettNav() {
   return (
-    <div className="flex justify-center items-center ">
-    <nav className="bg-gray-50 dark:bg-gray-800 w-full lg:w-[50%] md:w-[70%] sm:w-full ">
+    <div className="flex justify-center items-center">
+    <nav className="bg-gray-50 dark:bg-gray-800 w-full lg:w-1/3 md:w-[50%] sm:w-full rounded-lg">
 
-      <div className="bg-gray-50 dark:bg-gray-800">
+      <div className="bg-gray-50 dark:bg-gray-800 rounded-lg">
         <div className="w-full " id="navbar-default">
-          <ul className="font-medium flex flex-row items-center justify-between p-4 border-b  border-gray-200 md:border-0 dark:border-gray-700">
+          <ul className="font-medium text-lg flex flex-row items-center justify-between p-4 border-b  border-gray-200 md:border-0 dark:border-gray-700">
             
-            <li>
+            <li className="ml-6">
               <NavLink
                 to="/profilesetting"
                 className={({ isActive }) =>
@@ -22,7 +22,7 @@ export default function SettNav() {
               </NavLink>
             </li>
 
-            <li>
+            <li className="mr-6 ml-6">
               <NavLink
                 to="/passwordsetting"
                 className={({ isActive }) =>
@@ -35,7 +35,7 @@ export default function SettNav() {
               </NavLink>
             </li>
 
-            <li>
+            {/* <li>
               <NavLink
                 to="/appearancesetting"
                 className={({ isActive }) =>
@@ -46,7 +46,7 @@ export default function SettNav() {
               >
                 Appearance
               </NavLink>
-            </li>
+            </li> */}
 
           </ul>
         </div>

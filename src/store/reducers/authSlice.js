@@ -2,13 +2,14 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import api from "../../api/baseUrl";
 
-import { loadAuthData } from "../../Utils/loadAuthData";
+import { loadAuthData } from "../../utilis/loadAuthData";
 
 const initialState = {
   user: null,
   loading: false,
   error: null,
   token: null,
+  isSidebarOpen: false,
   passwordResetFlow: {
     emailSent: null,
     otpVerified: false,
@@ -69,10 +70,9 @@ export const verifyOtp = createAsyncThunk(
       const response = await api.post(`/auth/verify-otp`, {
         resetCode,
       });
-      console.log("API Response:", response.data); // Add this for debugging
+
       return response.data;
     } catch (error) {
-      console.error("API Error:", error.response); // Log the error response
       return rejectWithValue(
         error.response?.data?.message || "OTP verification failed"
       );
@@ -102,6 +102,7 @@ const authSlice = createSlice({
   reducers: {
     initialAuth: (state) => {
       const { token, user } = loadAuthData();
+      console.log(user, token);
 
       if (token) {
         state.token = token;
@@ -123,6 +124,9 @@ const authSlice = createSlice({
         otpError: null,
         resetSuccess: null,
       };
+    },
+    setOpenSidebar: (state, action) => {
+      state.isSidebarOpen = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -149,7 +153,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = action.payload?.user;
         state.token = action.payload?.token;
-
+        localStorage.setItem("user", JSON.stringify(state.user));
         Cookies.set("token", action.payload?.token, { expires: 7 });
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -176,7 +180,7 @@ const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(verifyOtp.fulfilled, (state, action) => {
+      .addCase(verifyOtp.fulfilled, (state) => {
         state.loading = false;
         state.passwordResetFlow.otpVerified = true;
       })
@@ -198,5 +202,6 @@ const authSlice = createSlice({
       });
   },
 });
-export const { initialAuth, logout, resetPasswordFlow } = authSlice.actions;
+export const { initialAuth, logout, resetPasswordFlow, setOpenSidebar } =
+  authSlice.actions;
 export default authSlice.reducer;
