@@ -58,18 +58,18 @@ function App() {
 
 
         <Route  element={<Layout />}>
-            <Route  path="tasks" element={<Tasks />} />
-          <Route  path="create-task" element={<TaskForm />} />
-          <Route path="/edit-task/:id" element={<EditTaskModal />} />
-          <Route path="/categories" element={<Categories />} />
+            <Route  path="tasks" element={<AuthGuard> <Tasks /> </AuthGuard>} />
+          <Route  path="create-task" element={<AuthGuard> <TaskForm /> </AuthGuard>} />
+          <Route path="/edit-task/:id" element={<AuthGuard> <EditTaskModal /> </AuthGuard>} />
+          <Route path="/categories" element={<AuthGuard> <Categories /> </AuthGuard>} />
           
         </Route>        
         
         
         
         <Route  element={<SettLayout />}>
-          <Route  path="passwordsetting" element={<PasswordSettings />} />
-          <Route  path="profilesetting" element={<ProfileSettings />} />
+          <Route  path="passwordsetting" element={<AuthGuard> <PasswordSettings /> </AuthGuard>} />
+          <Route  path="profilesetting" element={<AuthGuard> <ProfileSettings /> </AuthGuard>} />
         </Route>
 
       </Routes>

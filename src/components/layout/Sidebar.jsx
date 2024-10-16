@@ -1,10 +1,12 @@
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { setOpenSidebar } from "../../store/reducers/authSlice";
+import { logout } from "../../store/reducers/authSlice";
 import { IoCloseSharp } from "react-icons/io5";
 
 export default function Sidebar() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { isSidebarOpen } = useSelector((state) => state.auth);
   const location = useLocation();
 
@@ -12,6 +14,15 @@ export default function Sidebar() {
 
   const toggleSidebar = () => {
     dispatch(setOpenSidebar(false));
+  };
+
+  const handleLogout = () => {
+    const isConfirmed = window.confirm("Are you sure you want to log out?");
+    
+    if (isConfirmed) {
+      dispatch(logout());
+      navigate("/login")
+    }
   };
 
   return (
@@ -163,7 +174,7 @@ export default function Sidebar() {
 
             <li>
               <Link
-                to="/login"
+                onClick={handleLogout}
                 className={`flex items-center p-2 rounded-lg group text-darkest dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                 }`}
               >
