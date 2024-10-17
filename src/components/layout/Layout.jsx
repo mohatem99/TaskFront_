@@ -7,8 +7,7 @@ function Layout() {
       <div className="w-1/5  bg-white  ">
         <Sidebar />
       </div>
-
-      <div className="flex-1 flex flex-col overflow-hidden sm:ml-64 md:ml-9 lg:ml-1">
+      <div className="flex-1 flex flex-col overflow-hidden sm:w-full md:ml-20  lg:ml-5 ">
         {/* Navbar at the top */}
         <Navbar />
 

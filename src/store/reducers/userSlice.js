@@ -5,21 +5,30 @@ import Cookies from "js-cookie";
 const initialState = {
   user: null,
   loading: false,
+  users: [],
   error: null,
 };
+export const allUsers = createAsyncThunk(
+  "users/allUsers",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get("/users");
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 export const profileData = createAsyncThunk(
   "users/profileData",
-  async (_, {rejectWithValue }) => {
-    const token = Cookies.get("token")
-
+  async (_, { getState, rejectWithValue }) => {
     try {
-      const response = await api.get(`/users/me`, {
-        headers: {
-          token: `Bearer ${token}`,
-        },
-      });
-
+      const token = getState().auth.token;
+      const config = { headers: { token: `Bearer ${token}` } };
+      const response = await api.get(`/users/me`, config);
+      console.log(response);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
@@ -29,8 +38,8 @@ export const profileData = createAsyncThunk(
 
 export const updateLoggedUser = createAsyncThunk(
   "users/updateLoggedUser",
-  async (formData, {rejectWithValue }) => {
-    const token = Cookies.get("token")
+  async (formData, { rejectWithValue }) => {
+    const token = Cookies.get("token");
     try {
       const response = await api.put(`/users/update-me`, formData, {
         headers: {
@@ -47,14 +56,18 @@ export const updateLoggedUser = createAsyncThunk(
 
 export const updateLoggedUserPassword = createAsyncThunk(
   "users/updateLoggedUserPassword",
-  async ({password, confirmPassword }, {rejectWithValue }) => {
-    const token = Cookies.get("token")
+  async ({ password, confirmPassword }, { rejectWithValue }) => {
+    const token = Cookies.get("token");
     try {
-      const response = await api.put(`/users/update-my-password`, {password,confirmPassword}, {
-        headers: {
-          token: `Bearer ${token}`,
-        },
-      });
+      const response = await api.put(
+        `/users/update-my-password`,
+        { password, confirmPassword },
+        {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        }
+      );
 
       return response.data;
     } catch (error) {
@@ -102,6 +115,18 @@ const userSlice = createSlice({
         state.user = action.payload?.user;
       })
       .addCase(updateLoggedUserPassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(allUsers.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(allUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload.users;
+      })
+      .addCase(allUsers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

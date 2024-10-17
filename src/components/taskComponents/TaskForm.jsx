@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Loading from "../Loading";
@@ -6,7 +6,7 @@ import notify from "../../hooks/useNotification";
 import { fetchCategories } from "../../store/reducers/categoriesSlice";
 import { useFormik } from "formik";
 import { addTask } from "../../store/reducers/tasksSlice";
-import { allUsers } from "../../store/reducers/allusersSlice";
+import { allUsers } from "../../store/reducers/userSlice";
 
 const TaskForm = () => {
   const dispatch = useDispatch();
@@ -22,11 +22,9 @@ const TaskForm = () => {
     (store) => store.categories.categories
   );
 
-  const allUsersFromRedux = useSelector(
-    (store) => store.users
-  );
-
-
+  console.log(categoriesFromRedux);
+  const allUsersFromRedux = useSelector((store) => store.users.users);
+  console.log(allUsersFromRedux);
   const handleSubmit = async (values, { setSubmitting }) => {
     setLoading(true);
     console.log("Form submitted!", values);
@@ -40,27 +38,23 @@ const TaskForm = () => {
         priority: values.priority,
         assignedTo: values.assignedTo,
       };
-      
-
 
       const result = await dispatch(addTask(taskData));
 
       if (result) {
         navigate("/tasks");
         notify("Task Added Successfully!", "success");
-
       } else {
         notify("Task creation failed", "error");
       }
     } catch (error) {
       notify(error.message, "error");
-      console.log(error)
+      console.log(error);
     } finally {
       setSubmitting(false);
       setLoading(false);
     }
   };
-
 
   const formik = useFormik({
     initialValues: {
@@ -123,7 +117,7 @@ const TaskForm = () => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           >
-            {categoriesFromRedux.map((cat) => (
+            {categoriesFromRedux?.map((cat) => (
               <option key={cat._id} value={cat._id}>
                 {cat.name}
               </option>

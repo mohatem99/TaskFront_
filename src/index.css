@@ -3,9 +3,6 @@
 @tailwind utilities;
 
 
-body {
-    @apply font-sans;
-  }
 
   /* Custom width for the calendar */
 .react-calendar {

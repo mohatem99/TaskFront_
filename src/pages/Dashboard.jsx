@@ -21,6 +21,7 @@ import progressIcon from "../assets/progressIcon.svg";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTaskStats } from "../store/reducers/tasksSlice";
+import Loading from "../components/Loading";
 
 const PIRCOLORS = ["#0E9F6E", "#FACA15", "#F05252"];
 const STATCOLORS = ["#98ABFF", "#546FFF", "#10197A"];
@@ -39,10 +40,14 @@ function Dashboard() {
     dispatch(fetchTaskStats());
   }, [dispatch]);
 
+  if (loading) {
+    return <Loading />;
+  }
   // Handle the case where stats is null
   if (!stats) {
     return <div>No statistics available.</div>;
   }
+
   const { statusStats, priorityStats, categoryStats, tasksByDate } = stats;
 
   // Prepare Data for Recharts
@@ -80,28 +85,30 @@ function Dashboard() {
         <AnalyticButton
           imgSrc={checkIcon}
           title="Total Tasks"
-          number={27}
+          number={
+            statusStats.completed + statusStats.pending + statusStats.inProgress
+          }
           bgColor={"bg-customBlue500"}
         />
 
         <AnalyticButton
-          imgSrc={alarmIcon} 
+          imgSrc={alarmIcon}
           title="Pending"
-          number={5}
+          number={statusStats.pending}
           bgColor={"bg-[#7E95FF]"}
         />
 
         <AnalyticButton
           imgSrc={progressIcon}
           title="In Progress"
-          number={12}
+          number={statusStats.inProgress}
           bgColor={"bg-customBlue300"}
         />
 
         <AnalyticButton
-          imgSrc={checkIcon} 
+          imgSrc={checkIcon}
           title="Completed"
-          number={10}
+          number={statusStats.completed}
           bgColor={"bg-customBlue200"}
         />
       </div>

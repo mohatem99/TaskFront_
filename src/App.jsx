@@ -49,7 +49,8 @@ function App() {
         </Route>
 
         <Route path="/" element={<Auth />}>
-        <Route index path="/login" element={<Login />} />
+        <Route index element={<Landing />} />
+        <Route  path="/login" element={<Login />} />
         <Route index path="/signup" element={<SignUp />} />
         <Route index path= "forget-pass" element= {<ForgetPass /> }/>
         <Route index path= "check-email" element= {<CheckEmail /> }/>

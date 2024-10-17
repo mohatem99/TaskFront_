@@ -147,7 +147,7 @@ export default function Sidebar() {
 
             <li>
               <Link
-                to="/passwordsetting"
+                to="/profilesetting"
                 className={`mb-4 flex items-center p-2 group ${
                   isActive("/passwordsetting") || isActive("/profilesetting")
                     ? "bg-darkest dark:bg-gray-600 text-white rounded-r-lg"

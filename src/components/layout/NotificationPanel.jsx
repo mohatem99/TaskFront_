@@ -1,4 +1,9 @@
-import { Popover, PopoverButton, PopoverPanel ,Transition} from '@headlessui/react'
+import {
+  Popover,
+  PopoverButton,
+  PopoverPanel,
+  Transition,
+} from "@headlessui/react";
 import moment from "moment";
 import { Fragment, useEffect, useState } from "react";
 
@@ -37,15 +42,15 @@ const NotificationPanel = () => {
   ];
 
   useEffect(() => {
-    socket.on("connect", () => {
-      socket.emit("join", user?._id);
-    });
     dispatch(fetchNotifications());
+    console.log(socket);
+
+    socket.emit("join", user?._id);
     socket.on("taskAssigned", (data) => {
+      console.log(data);
       dispatch(addNewNotification(data.task));
     });
-  }, [dispatch, user?._id]);
-
+  }, [dispatch, user._id]);
   return (
     <>
       <Popover className="relative">
