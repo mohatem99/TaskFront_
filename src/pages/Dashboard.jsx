@@ -23,15 +23,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchTaskStats } from "../store/reducers/tasksSlice";
 import Loading from "../components/Loading";
 
-const PIRCOLORS = ["#0E9F6E", "#FACA15", "#F05252"];
+const PIRCOLORS = ["#F05252", "#FACA15","#0E9F6E"];
 const STATCOLORS = ["#98ABFF", "#546FFF", "#10197A"];
 const CATCOLORS = [
+  "#10197A",
   "#3D53DB",
+  "#9F84FD",
+  "#98ABFF",
   "#2A3BB7",
   "#1A2793",
   "#546FFF",
-  "#9F84FD",
-  "#98ABFF",
+
+
 ];
 function Dashboard() {
   const dispatch = useDispatch();
@@ -66,8 +69,8 @@ function Dashboard() {
   const categoryData = categoryStats?.map((cat) => ({
     name: cat._id,
     value: cat.count,
+    
   }));
-
   const tasksByDateData = tasksByDate?.map((date) => ({
     date: date._id,
     count: date.count,
@@ -129,15 +132,7 @@ function Dashboard() {
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip />
-              {/* <Legend
-                formatter={(value, entry, index) => (
-                  <span
-                    style={{ color: STATCOLORS[index % STATCOLORS.length] }}
-                  >
-                    {statusData[index].name}{" "}
-                  </span>
-                )}
-              />  */}
+              
 
               <Bar data={statusData} dataKey={"value"}>
                 {statusData.map((entry, index) => (
@@ -195,7 +190,8 @@ function Dashboard() {
               margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
             >
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
+              {/* name here is category id, needs modification */}
+              <XAxis dataKey="name" />  
               <YAxis />
               <Tooltip />
 

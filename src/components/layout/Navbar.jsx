@@ -57,7 +57,7 @@ function Navbar() {
           </div>
 
           {/* notifications */}
-          <div className="bg-customlight rounded-[20px]">
+          <div className="bg-customlight rounded-full w-10">
             <NotificationPanel />
           </div>
         </div>

@@ -5,6 +5,7 @@ import Loading from "../Loading";
 import notify from "../../hooks/useNotification";
 import { fetchCategories } from "../../store/reducers/categoriesSlice";
 import { useFormik } from "formik";
+import * as Yup from "yup";
 import { addTask } from "../../store/reducers/tasksSlice";
 import { allUsers } from "../../store/reducers/userSlice";
 
@@ -18,16 +19,11 @@ const TaskForm = () => {
     notify("Task creation cancelled", "success");
   };
 
-  const categoriesFromRedux = useSelector(
-    (store) => store.categories.categories
-  );
-
-  console.log(categoriesFromRedux);
+  const categoriesFromRedux = useSelector((store) => store.categories.categories);
   const allUsersFromRedux = useSelector((store) => store.users.users);
-  console.log(allUsersFromRedux);
-  const handleSubmit = async (values, { setSubmitting }) => {
+
+  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     setLoading(true);
-    console.log("Form submitted!", values);
     try {
       const taskData = {
         title: values.title,
@@ -39,22 +35,29 @@ const TaskForm = () => {
         assignedTo: values.assignedTo,
       };
 
-      const result = await dispatch(addTask(taskData));
+      const result = await dispatch(addTask(taskData)).unwrap();
 
       if (result) {
         navigate("/tasks");
         notify("Task Added Successfully!", "success");
-      } else {
-        notify("Task creation failed", "error");
       }
     } catch (error) {
-      notify(error.message, "error");
-      console.log(error);
+      notify("Task creation failed due to an error", "error");
     } finally {
       setSubmitting(false);
       setLoading(false);
     }
   };
+
+  const validationSchema = Yup.object({
+    title: Yup.string().required("Title is required"),
+    category: Yup.string().required("Category is required"),
+    description: Yup.string().required("Description is required"),
+    dueDate: Yup.date().required("Due date is required"),
+    status: Yup.string().required("Status is required"),
+    priority: Yup.string().required("Priority is required"),
+    assignedTo: Yup.string().required("Assigned user is required"),
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -66,6 +69,7 @@ const TaskForm = () => {
       priority: "",
       assignedTo: "",
     },
+    validationSchema,
     onSubmit: handleSubmit,
   });
 
@@ -88,7 +92,7 @@ const TaskForm = () => {
       </h1>
       <form
         onSubmit={formik.handleSubmit}
-        className="bg-customBlue100 p-6 rounded-xl w-full max-w-[600px] mx-auto space-y-4"
+        className="bg-customBlue100 p-6 rounded-xl w-full max-w-[600px] md[768-870]:max-w-[400px] mx-auto space-y-4"
       >
         <div>
           <label className="block mb-2 text-customBlue900 font-montserrat text-lg font-bold">
@@ -100,9 +104,14 @@ const TaskForm = () => {
             value={formik.values.title}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            className="w-full p-3 rounded-md border focus:ring-2 focus:ring-[#a6b7ef] outline-[#7b92dd]"
-            required
+            className={`w-full p-3 rounded-md border ${formik.touched.title && formik.errors.title
+              ? "border-red-500 focus:ring-red-500"
+              : "border-neutral-50 focus:ring-[#a6b7ef]"
+              } outline-none`}
           />
+          {formik.touched.title && formik.errors.title && (
+            <div className="text-red-500 text-sm mt-1">{formik.errors.title}</div>
+          )}
         </div>
 
         <div>
@@ -111,18 +120,24 @@ const TaskForm = () => {
           </label>
           <select
             name="category"
-            className="w-full p-3 rounded-md border focus:ring-2 focus:ring-[#a6b7ef] outline-[#7b92dd]"
-            required
+            className={`w-full p-3 rounded-md border ${formik.touched.category && formik.errors.category
+              ? "border-red-500 focus:ring-red-500"
+              : "border-neutral-50 focus:ring-[#a6b7ef]"
+              } outline-none`}
             value={formik.values.category}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           >
+            <option value=""> Select Category </option>
             {categoriesFromRedux?.map((cat) => (
               <option key={cat._id} value={cat._id}>
                 {cat.name}
               </option>
             ))}
           </select>
+          {formik.touched.category && formik.errors.category && (
+            <div className="text-red-500 text-sm mt-1">{formik.errors.category}</div>
+          )}
         </div>
 
         <div>
@@ -134,9 +149,14 @@ const TaskForm = () => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             name="description"
-            className="w-full p-3 rounded-md border focus:ring-2 focus:ring-[#a6b7ef] outline-[#7b92dd]"
-            required
+            className={`w-full p-3 rounded-md border ${formik.touched.description && formik.errors.description
+              ? "border-red-500 focus:ring-red-500"
+              : "border-neutral-50 focus:ring-[#a6b7ef]"
+              } outline-none`}
           />
+          {formik.touched.description && formik.errors.description && (
+            <div className="text-red-500 text-sm mt-1">{formik.errors.description}</div>
+          )}
         </div>
 
         <div>
@@ -149,9 +169,15 @@ const TaskForm = () => {
             onBlur={formik.handleBlur}
             type="date"
             name="dueDate"
-            className="w-full p-3 rounded-md border focus:ring-2 focus:ring-[#a6b7ef] outline-[#7b92dd]"
-            required
+            min={new Date().toISOString().split("T")[0]}
+            className={`w-full p-3 rounded-md border ${formik.touched.dueDate && formik.errors.dueDate
+              ? "border-red-500 focus:ring-red-500"
+              : "border-neutral-50 focus:ring-[#a6b7ef]"
+              } outline-none`}
           />
+          {formik.touched.dueDate && formik.errors.dueDate && (
+            <div className="text-red-500 text-sm mt-1">{formik.errors.dueDate}</div>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -164,13 +190,19 @@ const TaskForm = () => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               name="status"
-              className="w-full p-3 rounded-md border focus:ring-2 focus:ring-[#a6b7ef] outline-[#7b92dd]"
-              required
+              className={`w-full p-3 rounded-md border ${formik.touched.status && formik.errors.status
+                ? "border-red-500 focus:ring-red-500"
+                : "border-neutral-50 focus:ring-[#a6b7ef]"
+                } outline-none`}
             >
+              <option value=""> Select Current Status </option>
               <option value="pending">Pending</option>
               <option value="in progress">In Progress</option>
               <option value="completed">Completed</option>
             </select>
+            {formik.touched.status && formik.errors.status && (
+              <div className="text-red-500 text-sm mt-1">{formik.errors.status}</div>
+            )}
           </div>
 
           <div>
@@ -182,42 +214,46 @@ const TaskForm = () => {
               value={formik.values.priority}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className="w-full p-3 rounded-md border focus:ring-2 focus:ring-[#a6b7ef] outline-[#7b92dd]"
-              required
+              className={`w-full p-3 rounded-md border ${formik.touched.priority && formik.errors.priority
+                ? "border-red-500 focus:ring-red-500"
+                : "border-neutral-50 focus:ring-[#a6b7ef]"
+                } outline-none`}
             >
+              <option value=""> Select Priority</option>
               <option value="low">Low</option>
               <option value="medium">Medium</option>
               <option value="high">High</option>
             </select>
+            {formik.touched.priority && formik.errors.priority && (
+              <div className="text-red-500 text-sm mt-1">{formik.errors.priority}</div>
+            )}
           </div>
         </div>
 
         <div>
           <label className="block mb-2 text-customBlue900 font-montserrat text-lg font-bold">
-            Assigned To: (Optional)
+            Assign User
           </label>
-          {/* <input
-            value={formik.values.assignedTo}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            type="text"
-            name="assignedTo"
-            className="w-full p-3 rounded-md border focus:ring-2 focus:ring-[#a6b7ef] outline-[#7b92dd]"
-          /> */}
           <select
             name="assignedTo"
-            className="w-full p-3 rounded-md border focus:ring-2 focus:ring-[#a6b7ef] outline-[#7b92dd]"
-            required
+            className={`w-full p-3 rounded-md border ${formik.touched.assignedTo && formik.errors.assignedTo
+              ? "border-red-500 focus:ring-red-500"
+              : "border-neutral-50 focus:ring-[#a6b7ef]"
+              } outline-none`}
             value={formik.values.assignedTo}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           >
+            <option value=""> Select User </option>
             {allUsersFromRedux?.map((user) => (
               <option key={user._id} value={user._id}>
                 {user.name}
               </option>
             ))}
           </select>
+          {formik.touched.assignedTo && formik.errors.assignedTo && (
+            <div className="text-red-500 text-sm mt-1">{formik.errors.assignedTo}</div>
+          )}
         </div>
 
         <div className="flex justify-center space-x-4 mt-6">

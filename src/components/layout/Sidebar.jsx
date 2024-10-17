@@ -16,12 +16,12 @@ export default function Sidebar() {
     dispatch(setOpenSidebar(false));
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     const isConfirmed = window.confirm("Are you sure you want to log out?");
     
     if (isConfirmed) {
-      dispatch(logout());
-      navigate("/login")
+      await dispatch(logout());
+      navigate("/login");
     }
   };
 

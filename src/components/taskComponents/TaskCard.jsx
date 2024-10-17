@@ -1,11 +1,18 @@
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import editImg from '../../assets/edit.svg';
 import trashImg from '../../assets/trash.svg';
 import { IoMdCalendar } from 'react-icons/io';
 import { removeTask } from '../../store/reducers/tasksSlice';
-import notify from'../../hooks/useNotification'
-import { Link } from 'react-router-dom';
+import notify from '../../hooks/useNotification';
 import { formatedDate } from '../../utilis/dateUtils';
+import { useDispatch } from 'react-redux';
+import {
+  MdKeyboardArrowDown,
+  MdKeyboardArrowUp,
+  MdKeyboardDoubleArrowUp,
+} from "react-icons/md";
+
 
 export default function TaskCard({ task }) {
   const dispatch = useDispatch();
@@ -15,13 +22,26 @@ export default function TaskCard({ task }) {
       case 'low':
         return 'text-green-500';
       case 'medium':
-        return 'text-yellow-500';
+        return 'text-yellow-400';
       case 'high':
         return 'text-red-500';
       default:
         return 'text-red-500';
     }
   };
+
+  const getPriorityIcon = (priority) => {
+    switch (priority) {
+      case 'high':
+        return <MdKeyboardDoubleArrowUp className="text-red-500" />;
+      case 'medium':
+        return <MdKeyboardArrowUp className="text-yellow-400" />;
+      case 'low':
+        return <MdKeyboardArrowDown className="text-green-500" />;
+      default:
+        return null;
+    }
+  }
 
 
   const handleRemoveTask = (taskId) => {
@@ -32,8 +52,6 @@ export default function TaskCard({ task }) {
   return (
     <div className={`h-fit px-4 py-3 gap-4 shadow-lg rounded-md flex flex-col`}>
       <div className="flex flex-col gap-3 ">
-
-
         <div className="font-semibold font-montserrat text-[14px] text-customBlue900 px-2 py-1 rounded-2xl bg-[#F4F4F4] w-fit">
           # {task.category?.name}
         </div>
@@ -46,9 +64,13 @@ export default function TaskCard({ task }) {
             <IoMdCalendar className="w-5 h-5 text-customBlue900 mr-1" />
             <p className="font-bold text-customBlue900 text-[12px]">{formatedDate(task.dueDate)}</p>
           </div>
-          <p className={`text-md font-bold ${getPriorityColor(task.priority)}`}>
-            {task.priority}
-          </p>
+
+          <div className="flex items-center">
+            {getPriorityIcon(task.priority)}
+            <p className={`text-md font-bold ${getPriorityColor(task.priority)}`}>
+              {task.priority}
+            </p>
+          </div>
 
           <div className="flex items-center gap-2">
             <button className="px-1 rounded-md text-slate-100">

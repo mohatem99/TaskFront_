@@ -22,7 +22,7 @@ function Tasks() {
       <Loading />
     </div>
   ) : (
-    <div className="w-full px-4 md:px-8 lg:px-12 xl:px-20">
+    <div className="w-full">
     
       <div className="flex-1 bg-[#F4F4F4] p-4 rounded-2xl shadow-md mt-7">
         <div className="flex flex-col lg:flex-row text-sm lg:text-base">
@@ -69,7 +69,7 @@ function Tasks() {
 
       
       {/* Task Columns */}
-      <div className="w-full px-4 md:px-8 lg:px-12 xl:px-20">
+      <div className="w-full px-4 ">
         <div className="flex flex-col lg:flex-row gap-4 py-4">
           {/* To Do Column */}
           <TaskColumn

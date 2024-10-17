@@ -6,12 +6,13 @@ import {
 } from "@headlessui/react";
 import moment from "moment";
 import { Fragment, useEffect, useState } from "react";
+import NotificationIcon from '../../assets/NotificationIcon.svg'
 
 import { HiBellAlert } from "react-icons/hi2";
-import { IoIosNotificationsOutline } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
+  markNotificationAsRead,
   addNewNotification,
   fetchNotifications,
 } from "../../store/reducers/notifySlice";
@@ -27,6 +28,13 @@ const NotificationPanel = () => {
   const { user } = useSelector((state) => state.auth);
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(null);
+
+
+
+  const handleMarkAsRead = (notificationId) => {
+    dispatch(markNotificationAsRead(notificationId));
+  };
+
 
   //  const { data, refetch } = useGetNotificationsQuery();
   //  const [markAsRead] = useMarkNotiAsReadMutation();
@@ -56,7 +64,7 @@ const NotificationPanel = () => {
       <Popover className="relative">
         <PopoverButton className="inline-flex items-center outline-none">
           <div className="w-8 h-8 flex items-center justify-center text-gray-800 relative">
-            <IoIosNotificationsOutline className="text-4xl" />
+            <img src={NotificationIcon} className="w-6 h-6 mt-2 ml-2" />
             {items?.length > 0 && (
               <span className="absolute text-center top-0 right-1 text-sm text-white font-semibold w-4 h-4 rounded-full bg-red-600">
                 {unseenCount}
@@ -74,28 +82,31 @@ const NotificationPanel = () => {
           leaveFrom="opacity-100 translate-y-0"
           leaveTo="opacity-0 translate-y-1"
         >
-          <PopoverPanel className="absolute -right-16 md:-right-2 z-10 mt-5 flex w-screen max-w-max  px-3">
+          <PopoverPanel className="absolute -right-16 md:-right-2 z-10 mt-5 flex w-screen max-w-max sm:mr-8 md:mr-0 px-3">
             {({ close }) =>
               items?.length > 0 && (
-                <div className="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
-                  <div className="p-4">
+                <div className="w-64 max-w-xs sm:w-64 lg:w-screen lg:max-w-max  flex-auto overflow-hidden  rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
+                  <div className="p-4 mr-5 sm:mr-0">
                     {items?.slice(0, 5).map((item, index) => (
                       <div
                         key={item._id + index}
-                        className="group relative flex gap-x-4 rounded-lg p-4 hover:bg-gray-50"
+                        className={`group relative mb-1 flex gap-x-4 rounded-lg p-4 hover:bg-gray-50 ${
+                          item.isRead ? "bg-white" : "bg-customBlue300"
+                        }`}
+                        onClick={() => handleMarkAsRead(item._id)}
                       >
                         <div className="mt-1 h-8 w-8 flex items-center justify-center rounded-lg bg-gray-200 group-hover:bg-white">
-                          <HiBellAlert className="h-5 w-5 text-gray-600 group-hover:text-indigo-600" />
+                          <HiBellAlert className="h-5 w-5 text-gray-600 group-hover:text-customBlue500" />
                         </div>
 
-                        <div className="cursor-pointer">
+                        <div className="cursor-pointer ">
                           <div className="flex items-center gap-3 font-semibold text-gray-900 capitalize">
                             <p> {item.notiType}</p>
-                            <span className="text-xs font-normal lowercase">
+                            <span className="text-xs text-customBlue600 font-medium lowercase">
                               {moment(item.createdAt).fromNow()}
                             </span>
                           </div>
-                          <p className="line-clamp-1 mt-1 text-gray-600">
+                          <p className="lg:line-clamp-1 mt-1 text-darkest">
                             {item.message}
                           </p>
                         </div>
@@ -124,3 +135,4 @@ const NotificationPanel = () => {
 };
 
 export default NotificationPanel;
+// ${item.isRead ? "text-customBlue500" : "text-white"}
