@@ -13,7 +13,6 @@ export const allUsers = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get("/users");
-      console.log(response);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -28,7 +27,6 @@ export const profileData = createAsyncThunk(
       const token = getState().auth.token;
       const config = { headers: { token: `Bearer ${token}` } };
       const response = await api.get(`/users/me`, config);
-      console.log(response);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);

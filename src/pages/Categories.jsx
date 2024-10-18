@@ -3,8 +3,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import Loading from '../components/Loading';
 import AddCategoryForm from '../components/taskComponents/AddCategoryForm';
 import EditCategoryModal from '../components/taskComponents/EditCategoryModal';
-import { fetchCategories, removeCategory, updateCategory } from '../store/reducers/categoriesSlice';
+import { fetchCategories, removeCategory} from '../store/reducers/categoriesSlice';
 import { IoMdAdd } from 'react-icons/io';
+import notify from '../hooks/useNotification';
 
 export default function Categories() {
     const dispatch = useDispatch();
@@ -19,6 +20,7 @@ export default function Categories() {
 
     const handleRemove = (categoryId) => {
         dispatch(removeCategory(categoryId))
+        notify("Category Deleted Successfully", "success");
     }
 
     const openModal = () => {
@@ -38,9 +40,17 @@ export default function Categories() {
         setSelectedCategoryId(null);
     };
 
-    return loading ? (
-        <Loading />
-    ) : (
+    if (loading) {
+        return <Loading />;
+    }
+
+    if (error) {
+        return (
+            <Error message="Failed to load categories. Please try again." />
+        );
+    }
+
+    return (
         <div className="flex flex-col items-center justify-center p-4">
             <h1 className="text-customBlue900 font-montserrat text-[25px] font-bold mb-6 text-center">Categories</h1>
 
@@ -66,8 +76,8 @@ export default function Categories() {
                             </tr>
                         </thead>
                         <tbody>
-                            {categories.length > 0 ? (
-                                categories.map((category) =>
+                            {categories?.length > 0 ? (
+                                categories?.map((category) =>
                                     <tr
                                         key={category._id}
                                         className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
@@ -76,7 +86,7 @@ export default function Categories() {
                                         <td className="px-6 py-4 flex justify-center items-center gap-4">
                                             <button
                                                 className="bg-red-600 hover:bg-red-700 text-white font-bold font-montserrat py-2 px-4 rounded"
-                                                onClick={() => handleRemove(category._id)}
+                                                onClick={() => handleRemove(category?._id)}
                                             >
                                                 Delete
                                             </button>
@@ -84,8 +94,8 @@ export default function Categories() {
                                             <button
                                                 className="bg-customBlue900 hover:bg-blue-700 text-white font-bold font-montserrat py-2 px-4 rounded"
                                                 onClick={() => {
-                                                    openEditModal(category._id)
-                                                    setSelectedCategoryId(category._id)
+                                                    openEditModal(category?._id)
+                                                    setSelectedCategoryId(category?._id)
                                                 }
                                                 }
                                             >

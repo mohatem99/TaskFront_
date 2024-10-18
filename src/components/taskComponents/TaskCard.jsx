@@ -52,7 +52,7 @@ export default function TaskCard({ task }) {
     <div className={`h-fit px-6 py-5 gap-4 shadow-md rounded-lg flex flex-col border border-gray-200 bg-white`}>
       <div className="flex items-center justify-between mb-3">
         <div className="font-semibold text-[14px] text-customBlue900 px-3 py-1 rounded-2xl bg-[#F4F4F4] w-fit">
-          # {task.category?.name}
+          # {task?.category.name}
         </div>
 
         {task?.createdBy?.image?.secure_url && (
@@ -73,17 +73,17 @@ export default function TaskCard({ task }) {
 
 
       <div className="flex items-center gap-3 mb-2">
-        <h4 className="text-lg font-bold text-customBlue900 flex-1">{task.title}</h4>
+        <h4 className="text-lg font-bold text-customBlue900 flex-1">{task?.title}</h4>
       </div>
 
       <p className="font-montserrat font-medium text-[15px] text-customBlue900 mb-4 break-words">
-        {task.description}
+        {task?.description}
       </p>
 
       <div className="flex flex-col justify-between mt-auto rounded-lg">
         <div className="flex justify-between items-center mb-2">
           <div className="flex items-center">
-            {getPriorityIcon(task.priority)}
+            {getPriorityIcon(task?.priority)}
             <p className={`text-md font-bold ${getPriorityColor(task?.priority)}`}>
               {task?.priority}
             </p>
@@ -91,12 +91,12 @@ export default function TaskCard({ task }) {
 
           <div className="flex items-center gap-3">
             <button className="p-2 rounded-md bg-gray-100 hover:bg-gray-200 transition">
-              <Link to={`/edit-task/${task._id}`}>
+              <Link to={`/edit-task/${task?._id}`}>
                 <img src={editImg} className="w-5 h-5" alt="Edit" />
               </Link>
             </button>
 
-            {task?.createdBy._id === user._id && (
+            {task?.createdBy._id === user?._id && (
               <button
                 onClick={() => handleRemoveTask(task._id)}
                 className="p-2 rounded-md bg-gray-100 hover:bg-gray-200 transition">
@@ -115,11 +115,11 @@ export default function TaskCard({ task }) {
             </p>
           </div>
 
-          {task?.assignedTo.image.secure_url && (
+          {task?.assignedTo?.image?.secure_url && (
             <div className="relative flex items-center group gap-2">
               <p className="font-semibold text-customBlue900 text-sm">Assigned To:</p>
               <img
-                src={task?.assignedTo.image.secure_url}
+                src={task?.assignedTo?.image?.secure_url}
                 alt="Assigned User"
                 className="w-8 h-8 rounded-full object-cover"
               />

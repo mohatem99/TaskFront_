@@ -49,7 +49,6 @@ export const addTask = createAsyncThunk(
     try {
       const token = getState().auth.token;
       const config = { headers: { token: `Bearer ${token}` } };
-      console.log(token);
       const response = await api.post("/tasks", taskData, config);
 
       return response.data;
@@ -94,7 +93,6 @@ export const fetchTaskStats = createAsyncThunk(
     try {
       const token = getState().auth.token;
       const config = { headers: { token: `Bearer ${token}` } };
-      console.log(token);
       const response = await api.get("/tasks/dash-stats", config);
 
       return response.data;

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { updateCategory } from '../../store/reducers/categoriesSlice';
+import notify from '../../hooks/useNotification';
 
 export default function EditCategoryModal({ onClose, categoryId }) {
     const dispatch = useDispatch();
@@ -21,7 +22,9 @@ export default function EditCategoryModal({ onClose, categoryId }) {
         }),
         onSubmit: (values) => {
             dispatch(updateCategory({ id: categoryId, name: values.categoryName }));
+            notify("Category Updated Successfully", "success");
             onClose();
+
         },
     });
 
@@ -44,11 +47,10 @@ export default function EditCategoryModal({ onClose, categoryId }) {
                             value={formik.values.categoryName}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            className={`w-full px-4 py-2 border rounded-lg ${
-                                formik.touched.categoryName && formik.errors.categoryName
-                                    ? 'border-red-500'
-                                    : 'border-gray-300'
-                            } `}
+                            className={`w-full px-4 py-2 border rounded-lg ${formik.touched.categoryName && formik.errors.categoryName
+                                ? 'border-red-500'
+                                : 'border-gray-300'
+                                } `}
                             placeholder="Enter category name"
                         />
                         {formik.touched.categoryName && formik.errors.categoryName && (

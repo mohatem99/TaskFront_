@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Loading from "../Loading";
@@ -12,8 +12,7 @@ import { allUsers } from "../../store/reducers/userSlice";
 const TaskForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const {user} = useSelector((state) => state.auth)
+  const {user , loading} = useSelector((state) => state.auth)
 
   const handleCancel = () => {
     navigate("/tasks");
@@ -23,8 +22,7 @@ const TaskForm = () => {
   const categoriesFromRedux = useSelector((store) => store.categories.categories);
   const allUsersFromRedux = useSelector((store) => store.users.users);
 
-  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
-    setLoading(true);
+  const handleSubmit = async (values, { setSubmitting}) => {
     try {
       const taskData = {
         title: values.title,
@@ -46,7 +44,6 @@ const TaskForm = () => {
       notify("Task creation failed due to an error", "error");
     } finally {
       setSubmitting(false);
-      setLoading(false);
     }
   };
 

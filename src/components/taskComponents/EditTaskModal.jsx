@@ -48,9 +48,8 @@ const EditTaskForm = () => {
   });
 
   const handleSubmit = async (values, { setSubmitting }) => {
-    setLoading(true);
     try {
-      const result = await dispatch(updateTask({ taskId, task: values }));
+      const result = await dispatch(updateTask({ taskId, task: values })).unwrap();
 
       if (result) {
         navigate("/tasks");
@@ -60,7 +59,6 @@ const EditTaskForm = () => {
       notify("Task update failed", "error");
     } finally {
       setSubmitting(false);
-      setLoading(false);
     }
   };
 
@@ -91,10 +89,6 @@ const EditTaskForm = () => {
         <Loading />
       </div>
     );
-  }
-
-  if (error) {
-    return <div>Error loading task: {error}</div>;
   }
 
   return (

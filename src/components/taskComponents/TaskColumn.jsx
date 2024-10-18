@@ -14,7 +14,7 @@ const TaskColumn = ({ title, tasks, status, onAddTask }) => {
       </div>
       <div className="border-b-2 border-blue-900 my-2"></div>
       <div className="space-y-4">
-        {tasks.filter(task => task.status === status).map((task, index) => (
+        {tasks.filter(task => task?.status === status).map((task, index) => (
           <TaskCard task={task} key={index} />
         ))}
       </div>

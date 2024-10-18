@@ -44,17 +44,28 @@ function Tasks() {
     dispatch(fetchTasks({ searchTerm, priority }));
   }, [dispatch, searchTerm, priority]);
 
-  return loading ? (
-    <div className="py-10">
-      <Loading />
-    </div>
-  ) : (
+  if (loading) {
+    return (
+      <div className="py-10">
+        <Loading />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <Error message="Failed to load tasks. Please try again." />
+    );
+  }
+
+
+  return (
     <div className="w-full ">
       <div className="flex-1 bg-white p-4 rounded-2xl shadow-md mt-7">
         <div className="flex flex-col lg:flex-row text-sm lg:text-base">
           <div className="flex-1 p-2 border-b-2 border-customBlue900 lg:border-b-0 lg:border-r-2 lg:border-customBlue900 lg:h-full flex flex-col items-center justify-center">
             {" "}
-            
+
             <h2 className="text-customBlue900 font-montserrat font-bold text-center md:text-left">
               {getFullMonth()}
             </h2>
@@ -65,7 +76,7 @@ function Tasks() {
 
           <div className="flex-1 p-2 border-b-2 border-customBlue900 lg:border-b-0 lg:border-r-2 lg:border-customBlue900 lg:h-full flex flex-col items-center justify-center">
             {" "}
-            
+
             <p className="text-customBlue900 font-montserrat font-bold text-center md:text-left">
               <label className="mr-2 text-customBlue900 font-bold">
                 Filter by Priority:
@@ -108,7 +119,7 @@ function Tasks() {
 
       {/* Task Columns */}
       <div className="w-full">
-        {tasks.length === 0 ? (
+        {tasks?.length === 0 ? (
           <p className="text-center font-bold text-customBlue900 text-[20px] py-40">There are no tasks here.</p>
         ) : (
           <div className="flex flex-col lg:flex-row gap-4 py-4">
