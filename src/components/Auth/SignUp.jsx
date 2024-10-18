@@ -17,17 +17,21 @@ export default function SignUp() {
   // Validation schema with Yup
   const validationSchema = Yup.object({
     firstName: Yup.string()
+      .trim()
       .min(2, "First Name must be at least 2 characters")
       .max(50, "Too Long!")
       .required("First Name is required"),
     lastName: Yup.string()
+      .trim()
       .min(2, "Last Name must be at least 2 characters")
       .max(50, "Too Long!")
       .required("Last Name is required"),
     email: Yup.string()
+      .trim()
       .email("Invalid email format")
       .required("Email is required"),
     password: Yup.string()
+
       .min(8, "Password must be at least 8 characters")
       .required("Password is required")
       .matches(
@@ -258,39 +262,6 @@ export default function SignUp() {
                 </div>
               )}
             </div>
-            {/* confirm password */}
-            {/* <div className="mb-2">
-                  <label
-                    htmlFor="confirmPassword"
-                    className="block mb-2 text-sm font-medium text-gray-500"
-                  >
-                    Confirm Password
-                  </label>
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    onChange={(e) => {
-                      formik.handleChange(e);
-                      if (formik.errors.confirmPassword) {
-                        formik.setFieldTouched("confirmPassword", false);
-                      }
-                    }}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.confirmPassword}
-                    className={`bg-gray-50 border ${
-                      formik.errors.confirmPassword &&
-                      formik.touched.confirmPassword
-                        ? "border-red-500"
-                        : "border-gray-300"
-                    } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-customBlue700 block w-full p-2.5`}
-                  />
-                  {formik.errors.confirmPassword &&
-                    formik.touched.confirmPassword && (
-                      <p className="bg-teal-500 text-white p-2 my-1 text-sm rounded-lg">
-                        {formik.errors.confirmPassword}
-                      </p>
-                    )}
-                </div> */}
 
             <button
               type="submit"

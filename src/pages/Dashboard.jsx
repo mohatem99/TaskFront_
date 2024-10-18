@@ -74,7 +74,7 @@ function Dashboard() {
     { name: "High", value: priorityStats?.highPriority },
     { name: "Medium", value: priorityStats?.mediumPriority },
     { name: "Low", value: priorityStats?.lowPriority },
-  ];
+  ].filter((entry) => entry.value > 0);
 
   const categoryData = categoryStats?.map((cat) => ({
     name: cat.categoryName, // Use the name of the category
