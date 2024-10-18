@@ -5,17 +5,23 @@ import SettNav from "../components/layout/SettNav";
 import { profileData, updateLoggedUser } from "../store/reducers/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import notify from "../hooks/useNotification";
+import ConfirmModal from "../components/Confirm/ConfirmModal";
 
 export default function ProfileSettings() {
   const profile = useSelector((state) => state.users.user);
+  const { loading } = useSelector((state) => state.users);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [selectedImage, setSelectedImage] = useState("");
   const dispatch = useDispatch();
-  const fileInputRef = useRef(null);
+  // const fileInputRef = useRef(null);
   const validationSchema = Yup.object({
-    name: Yup.string().min(3, "Full Name must be at least 3 characters long"),
-    email: Yup.string().email("Invalid email format"),
-    role: Yup.string(),
+    name: Yup.string()
+      .required("Name is required")
+      .min(3, "Full Name must be at least 3 characters long")
+      .max(100, "Too Long to be Name !"),
+    email: Yup.string()
+      .required("Email is required")
+      .email("Invalid email format"),
     image: Yup.mixed()
       .nullable()
       .test(
@@ -28,22 +34,20 @@ export default function ProfileSettings() {
   const initialValues = {
     name: profile?.name || "",
     email: profile?.email || "",
-    role: profile?.role || "",
+    // image: profile?.image?.secure_url || null,
   };
   const handleChanges = async (values, { setSubmitting }) => {
     try {
       const formData = new FormData();
       formData.append("name", values.name);
       formData.append("email", values.email);
-      formData.append("role", values.role);
 
       if (values.image) {
         formData.append("image", values.image);
       }
       const result = await dispatch(updateLoggedUser(formData)).unwrap();
       if (result) {
-        notify("Updated Successfuly!", "success");
-        setSelectedImage(URL.createObjectURL(values.image));
+        notify("Profile Updated Successfuly!", "success");
       } else {
         notify("Failed Update!. Please Login", "error");
       }
@@ -58,6 +62,9 @@ export default function ProfileSettings() {
     initialValues,
     validationSchema,
     onSubmit: handleChanges,
+    validateOnChange: true,
+    validateOnBlur: true,
+    enableReinitialize: true,
   });
 
   useEffect(() => {
@@ -67,10 +74,10 @@ export default function ProfileSettings() {
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      const imageURL = URL.createObjectURL(file);
-      setSelectedImage(imageURL);
+      const imageUrl = URL.createObjectURL(file);
 
       formik.setFieldValue("image", file);
+      formik.setFieldValue("imagePreview", imageUrl);
 
       try {
         console.log("Image uploaded successfully:", file.data);
@@ -81,9 +88,20 @@ export default function ProfileSettings() {
   };
 
   const triggerFileInput = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
+    document.getElementById("image").click();
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(true); // Open the confirmation modal
+  };
+  const confirmCancel = () => {
+    setIsModalOpen(false);
+
+    notify("Profile Update is cancelled", "success");
+  };
+  // Cancel the cancel action
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -106,7 +124,6 @@ export default function ProfileSettings() {
                     type="file"
                     id="image"
                     accept="image/*"
-                    ref={fileInputRef}
                     onChange={handleImageUpload}
                     className="hidden"
                   />
@@ -115,16 +132,24 @@ export default function ProfileSettings() {
                     onClick={triggerFileInput}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm block flex items-center justify-center cursor-pointer  w-20 h-20 rounded-full"
                   >
-                    <img
-                      src={selectedImage}
-                      alt="Uploaded"
-                      className="h-full w-full object-cover rounded-lg"
-                    />
+                    {formik.values.imagePreview ? (
+                      <img
+                        src={formik.values.imagePreview}
+                        alt="Uploaded"
+                        className="h-full w-full object-cover rounded-lg"
+                      />
+                    ) : (
+                      <img
+                        src={profile?.image?.secure_url}
+                        alt="Uploaded"
+                        className="h-full w-full object-cover rounded-lg"
+                      />
+                    )}
                   </div>
                   <button
                     type="button"
-                    className="text-white mt-5 bg-customBlue900 focus:outline-none focus:ring-4 focus:ring-blue-300 font-semibold rounded-lg text-sm px-4 py-2.5 dark:bg-customBlue600 dark:hover:bg-customBlue300 hover:bg-customBlue300"
                     onClick={triggerFileInput}
+                    className="text-white mt-5 bg-customBlue900 focus:outline-none focus:ring-4 focus:ring-blue-300 font-semibold rounded-lg text-sm px-4 py-2.5 dark:bg-customBlue600 dark:hover:bg-customBlue300 hover:bg-customBlue300"
                   >
                     Upload Photo
                   </button>
@@ -141,53 +166,70 @@ export default function ProfileSettings() {
                   <input
                     type="text"
                     id="name"
-                    {...formik.getFieldProps("name")}
+                    // {...formik.getFieldProps("name")}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.name}
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-customBlue100 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light dark:focus:bg-customGray"
                   />
                   {formik.errors.name && formik.touched.name && (
-                    <div className="text-red-500 text-sm">
+                    <p className="bg-teal-500 text-white p-2 my-1 text-sm rounded-lg border-red-500">
                       {formik.errors.name}
-                    </div>
+                    </p>
                   )}
                 </div>
                 <div className="mb-5">
                   <label
-                    htmlFor="role"
+                    htmlFor="email"
                     className="block mb-2 text-sm font-medium text-customBlue900 dark:text-customBlue100"
                   >
-                    Role
+                    Email
                   </label>
                   <input
-                    type="text"
-                    id="role"
+                    type="email"
+                    id="email"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.role}
+                    value={formik.values.email}
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-customBlue100 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light dark:focus:bg-customGray"
                   />
+                  {formik.errors.email && formik.touched.email && (
+                    <p className="bg-teal-500 text-white p-2 my-1 text-sm rounded-lg border-red-500">
+                      {formik.errors.email}
+                    </p>
+                  )}
                 </div>
               </div>
               <div className="col-span-2 flex justify-end mt-5">
                 <button
                   type="button"
+                  onClick={handleCancel}
                   className="text-customBlue900 bg-customGray focus:outline-none focus:ring-4 focus:ring-blue-300 font-semibold rounded-lg text-sm px-4 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-300 dark:focus:ring-blue-800 mr-2 dark:text-white hover:bg-gray-500 hover:text-white"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className={`text-white bg-customBlue900 focus:outline-none focus:ring-4 focus:ring-blue-300 font-semibold rounded-lg text-sm px-4 py-2.5 text-center dark:bg-customBlue600 dark:hover:bg-customBlue300 dark:focus:ring-blue-800 hover:bg-customBlue300${
-                    formik.isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                  disabled={formik.isSubmitting}
+                  disabled={loading}
+                  className="text-white bg-customBlue900 focus:outline-none focus:ring-4 focus:ring-blue-300 font-semibold rounded-lg text-sm px-4 py-2.5 text-center dark:bg-customBlue600 dark:hover:bg-customBlue300 dark:focus:ring-blue-800 hover:bg-customBlue300"
                 >
-                  Save Changes
+                  {loading ? (
+                    <>
+                      <i className="fas fa-spinner fa-spin mx-2 white-icon"></i>
+                    </>
+                  ) : (
+                    <span>Update Changes</span>
+                  )}
                 </button>
               </div>
             </form>
+            {/* Add the ConfirmModal */}
+            <ConfirmModal
+              message="Are you sure you want to cancel Updating profile?"
+              onConfirm={confirmCancel}
+              onCancel={closeModal}
+              isOpen={isModalOpen}
+            />
           </div>
         </div>
       </main>

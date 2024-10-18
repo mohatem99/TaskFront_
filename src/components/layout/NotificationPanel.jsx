@@ -18,7 +18,7 @@ import {
 } from "../../store/reducers/notifySlice";
 import { io } from "socket.io-client";
 
-const socket = io("http://127.0.0.1:8007");
+const socket = io("https://task-management-m6c9.onrender.com/");
 
 const NotificationPanel = () => {
   const dispatch = useDispatch();
@@ -96,7 +96,9 @@ const NotificationPanel = () => {
                   </div>
                 </div>
               ) : (
-                <div>No notifications yet</div>
+                <div className="bg-customBlue900  rounded-lg p-2 font-bold text-white dark:text-black">
+                  <span>No notifications yet </span>
+                </div>
               )
             }
           </PopoverPanel>

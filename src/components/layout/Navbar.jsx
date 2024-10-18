@@ -51,7 +51,7 @@ function Navbar() {
               <div className="font-bold text-darkest font-montserrat text-[15px]">
                 {profile?.name}
               </div>
-              <div className="text-gray-500 text-sm">{user?.email}</div>
+              <div className="text-gray-500 text-sm">{profile?.email}</div>
             </div>
           </div>
 

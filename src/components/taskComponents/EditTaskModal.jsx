@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -9,6 +9,7 @@ import { fetchTaskById, updateTask } from "../../store/reducers/tasksSlice";
 import notify from "../../hooks/useNotification";
 import { fetchCategories } from "../../store/reducers/categoriesSlice";
 import { allUsers } from "../../store/reducers/userSlice";
+import ConfirmModal from "../Confirm/ConfirmModal";
 import * as Yup from "yup";
 
 const EditTaskForm = () => {
@@ -17,6 +18,7 @@ const EditTaskForm = () => {
   const navigate = useNavigate();
   const { task, loading, error } = useSelector((state) => state.tasks);
   const { user } = useSelector((state) => state.auth);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const categoriesFromRedux = useSelector(
     (store) => store.categories.categories
@@ -39,9 +41,17 @@ const EditTaskForm = () => {
   }, [dispatch]);
 
   const validationSchema = Yup.object().shape({
-    title: Yup.string().required("Title is required"),
+    title: Yup.string()
+      .trim()
+      .required("Title is required")
+      .min(2, "Title must be at least 2 characters")
+      .max(100, "Too Long to be Title !"),
     category: Yup.string().required("Category is required"),
-    description: Yup.string().required("Description is required"),
+    description: Yup.string()
+      .trim()
+      .required("Description is required")
+      .min(15, "Discription must be at least 15 characters")
+      .max(1000, "Discription is Too Long!"),
     dueDate: Yup.date().required("Due date is required"),
     status: Yup.string().required("Status is required"),
     priority: Yup.string().required("Priority is required"),
@@ -64,7 +74,15 @@ const EditTaskForm = () => {
   };
 
   const handleCancel = () => {
+    setIsModalOpen(true); // Open the confirmation modal
+  };
+  const confirmCancel = () => {
     navigate("/tasks");
+    notify("Edit task  cancelled", "success");
+  };
+  // Cancel the cancel action
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   const formik = useFormik({
@@ -123,8 +141,10 @@ const EditTaskForm = () => {
                   : "border-gray-300"
               } focus:ring-2 focus:ring-[#a6b7ef] outline-[#7b92dd]`}
           />
-          {formik.touched.title && formik.errors.title && (
-            <div className="text-red-500">{formik.errors.title}</div>
+          {formik.errors.title && formik.touched.title && (
+            <p className="bg-teal-500 text-white p-2 my-1 text-sm rounded-lg border-red-500">
+              {formik.errors.title}
+            </p>
           )}
         </div>
 
@@ -152,8 +172,10 @@ const EditTaskForm = () => {
               </option>
             ))}
           </select>
-          {formik.touched.category && formik.errors.category && (
-            <div className="text-red-500">{formik.errors.category}</div>
+          {formik.errors.category && formik.touched.category && (
+            <p className="bg-teal-500 text-white p-2 my-1 text-sm rounded-lg border-red-500">
+              {formik.errors.category}
+            </p>
           )}
         </div>
 
@@ -174,8 +196,10 @@ const EditTaskForm = () => {
                   : "border-gray-300"
               } focus:ring-2 focus:ring-[#a6b7ef] outline-[#7b92dd]`}
           />
-          {formik.touched.description && formik.errors.description && (
-            <div className="text-red-500">{formik.errors.description}</div>
+          {formik.errors.description && formik.touched.description && (
+            <p className="bg-teal-500 text-white p-2 my-1 text-sm rounded-lg border-red-500">
+              {formik.errors.description}
+            </p>
           )}
         </div>
 
@@ -197,8 +221,10 @@ const EditTaskForm = () => {
                 : "border-neutral-50 focus:ring-[#a6b7ef]"
             } outline-none`}
           />
-          {formik.touched.dueDate && formik.errors.dueDate && (
-            <div className="text-red-500">{formik.errors.dueDate}</div>
+          {formik.errors.dueDate && formik.touched.dueDate && (
+            <p className="bg-teal-500 text-white p-2 my-1 text-sm rounded-lg border-red-500">
+              {formik.errors.dueDate}
+            </p>
           )}
         </div>
 
@@ -209,6 +235,7 @@ const EditTaskForm = () => {
             </label>
             <select
               name="status"
+              onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               value={formik.values.status}
               className={`w-full p-3 rounded-md border ${
@@ -222,10 +249,10 @@ const EditTaskForm = () => {
               <option value="in progress">In Progress</option>
               <option value="completed">Completed</option>
             </select>
-            {formik.touched.status && formik.errors.status && (
-              <div className="text-red-500 text-sm mt-1">
+            {formik.errors.status && formik.touched.status && (
+              <p className="bg-teal-500 text-white p-2 my-1 text-sm rounded-lg border-red-500">
                 {formik.errors.status}
-              </div>
+              </p>
             )}
           </div>
 
@@ -236,6 +263,7 @@ const EditTaskForm = () => {
             <select
               disabled={!isTaskCreator}
               name="priority"
+              onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               value={formik.values.priority}
               className={`w-full p-3 rounded-md border ${
@@ -249,10 +277,10 @@ const EditTaskForm = () => {
               <option value="medium">Medium</option>
               <option value="high">High</option>
             </select>
-            {formik.touched.priority && formik.errors.priority && (
-              <div className="text-red-500 text-sm mt-1">
+            {formik.errors.priority && formik.touched.priority && (
+              <p className="bg-teal-500 text-white p-2 my-1 text-sm rounded-lg border-red-500">
                 {formik.errors.priority}
-              </div>
+              </p>
             )}
           </div>
         </div>
@@ -264,6 +292,7 @@ const EditTaskForm = () => {
           <select
             disabled={!isTaskCreator}
             name="assignedTo"
+            onBlur={formik.handleBlur}
             onChange={formik.handleChange}
             value={formik.values.assignedTo}
             className={`w-full p-3 rounded-md border 
@@ -276,12 +305,14 @@ const EditTaskForm = () => {
             <option value="">Select User</option>
             {allUsersFromRedux?.map((element) => (
               <option key={element._id} value={element._id}>
-                {user?._id == element._id ? "me" : element.name}
+                {user?._id == element._id ? "To me" : element.name}
               </option>
             ))}
           </select>
-          {formik.touched.assignedTo && formik.errors.assignedTo && (
-            <div className="text-red-500">{formik.errors.assignedTo}</div>
+          {formik.errors.assignedTo && formik.touched.assignedTo && (
+            <p className="bg-teal-500 text-white p-2 my-1 text-sm rounded-lg border-red-500">
+              {formik.errors.assignedTo}
+            </p>
           )}
         </div>
 
@@ -295,12 +326,26 @@ const EditTaskForm = () => {
           </button>
           <button
             type="submit"
+            disabled={loading}
             className="w-5/12 bg-customBlue900 text-white font-montserrat text-base font-bold py-2 rounded-xl hover:bg-[#0b1366] transition-all"
           >
-            Update Task
+            {loading ? (
+              <>
+                <i className="fas fa-spinner fa-spin mx-2 white-icon"></i>
+              </>
+            ) : (
+              <span>Update Task</span>
+            )}
           </button>
         </div>
       </form>
+      {/* Add the ConfirmModal */}
+      <ConfirmModal
+        message="Are you sure you want to cancel the task Edit?"
+        onConfirm={confirmCancel}
+        onCancel={closeModal}
+        isOpen={isModalOpen}
+      />
     </>
   );
 };
