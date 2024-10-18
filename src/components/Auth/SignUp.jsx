@@ -74,7 +74,7 @@ export default function SignUp() {
 
       if (result) {
         notify("You created an account successfully", "success");
-        navigate("/login");
+        navigate("/auth/login");
       } else {
         notify("Register failed. Please check your credentials.", "error");
       }
@@ -310,7 +310,7 @@ export default function SignUp() {
           <div className="flex justify-center items-center">
             <p className="text-gray-500 mt-10">
               Already Have an account?{" "}
-              <Link to={"/login"} className="text-customBlue900 font-bold">
+              <Link to={"/auth/login"} className="text-customBlue900 font-bold">
                 Login
               </Link>
             </p>

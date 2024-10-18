@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import SettNav from "../components/layout/SettNav"
 import { profileData, updateLoggedUser } from "../store/reducers/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import notify from "../hooks/useNotification";
@@ -85,10 +86,17 @@ export default function ProfileSettings() {
   };
 
   return (
-    <div className="ml-10 md:ml-5 lg:ml-10 ">
-      <h2 className="text-customBlue900 font-bold mt-10 text-lg md:text-xl lg:text-2xl dark:text-customBlue100">
+
+    <div className="flex-1 overflow-y-auto p-2 2xl:px-10  ">
+    <header className="text-2xl font-bold text-customBlue900 dark:text-white">
+      Settings
+    </header>
+    <SettNav />
+    <main>
+    <div>
+      <h3 className="text-customBlue900 font-bold mt-5 text-2xl dark:text-customBlue100">
         Profile Information
-      </h2>
+      </h3>
 
       <div>
         <form className="w-full" onSubmit={formik.handleSubmit}>
@@ -180,5 +188,9 @@ export default function ProfileSettings() {
         </form>
       </div>
     </div>
+    </main>
+  </div>
+
+
   );
 }

@@ -15,10 +15,10 @@ export default function Landing() {
                 </div>
                 <div className=' flex gap-8 mt-10 lg:mt-20 md:mt-20 ml-4 text-md sm:text-xl md:text-2xl lg:text-3xl '>
                 <button className='bg-darkest text-white border p-3 lg:p-4' style={{ borderRadius: '17px' }}>
-                  <Link to={'/login'}>Log in</Link>
+                  <Link to={'/auth/login'}>Log in</Link>
                 </button>
                 <button className='bg-darkest text-white border p-3 lg:p-4' style={{ borderRadius: '17px' }}>
-                <Link to={'/signup'}>Sign Up</Link>
+                <Link to={'/auth/signup'}>Sign Up</Link>
                 </button>
                 </div>
         </div>

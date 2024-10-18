@@ -53,7 +53,7 @@ export default function ForgetPass() {
   useEffect(() => {
     if (passwordResetFlow.emailSent) {
       notify("Check Your email for OTP!", "success");
-      navigate("/check-email");
+      navigate("/auth/check-email");
     }
   }, [passwordResetFlow.emailSent, navigate]);
 

@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../store/reducers/authSlice";
 import notify from "../../hooks/useNotification";
 
-import LeftBanner from "../LeftBanner";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
@@ -42,7 +41,7 @@ export default function Login() {
 
       if (result) {
         notify("Login Successful!", "success");
-        navigate("/dashboard");
+        navigate("/");
       } else {
         notify("Login failed. Please check your credentials.", "error"); // Error toast
       }
@@ -114,7 +113,7 @@ export default function Login() {
               <div className="flex items-start mb-5">
                 <div className="flex justify-between w-full">
                   <Link
-                    to="/forget-pass"
+                    to="/auth/forget-pass"
                     className="text-customBlue900 font-semibold"
                   >
                     Forget Password?
@@ -140,7 +139,7 @@ export default function Login() {
           <div className="flex justify-center items-center">
             <p className="text-gray-500 mt-10">
               Don't Have an account?{" "}
-              <Link to={"/signup"} className="text-customBlue900 font-bold">
+              <Link to={"/auth/signup"} className="text-customBlue900 font-bold">
                 Signup
               </Link>
             </p>

@@ -1,21 +1,48 @@
-import React, { useEffect } from 'react';
-import Loading from '../components/Loading';
-import { useDispatch, useSelector } from 'react-redux';
-import { IoMdAdd } from 'react-icons/io';
+import { useEffect } from "react";
+import Loading from "../components/Loading";
+import { useDispatch, useSelector } from "react-redux";
+import { IoMdAdd } from "react-icons/io";
 import { TbCategoryPlus } from "react-icons/tb";
-import { Link } from 'react-router-dom';
-import { getFormattedDate, getFullMonth } from '../utilis/dateUtils';
-import { fetchTasks } from '../store/reducers/tasksSlice';
-import TaskColumn from '../components/taskComponents/TaskColumn';
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { getFormattedDate, getFullMonth } from "../utilis/dateUtils";
+import { fetchTasks, setPriority } from "../store/reducers/tasksSlice";
+import TaskColumn from "../components/taskComponents/TaskColumn";
 
 function Tasks() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-  const { tasks, loading, error } = useSelector((state) => state.tasks);
+  const { tasks, loading, error, priority } = useSelector(
+    (state) => state.tasks
+  );
+
+  const searchTerm = searchParams.get("search") || "";
+
+  const currentPriority = searchParams.get("priority") || "";
   useEffect(() => {
-    dispatch(fetchTasks());
-  }, [dispatch]);
+    dispatch(setPriority(currentPriority));
+  }, [currentPriority, dispatch]);
 
+  const handleChangePriority = (e) => {
+    let value = e.target.value;
+    if (value) {
+      if (searchTerm) {
+        navigate(`/tasks?search=${searchTerm}&priority=${value}`);
+      } else {
+        navigate(`/tasks?priority=${value}`);
+      }
+    } else {
+      if (searchTerm) {
+        navigate(`/tasks?search=${searchTerm}`);
+      } else {
+        navigate("/tasks");
+      }
+    }
+  };
+  useEffect(() => {
+    dispatch(fetchTasks({ searchTerm, priority }));
+  }, [dispatch, searchTerm, priority]);
 
   return loading ? (
     <div className="py-10">
@@ -23,21 +50,32 @@ function Tasks() {
     </div>
   ) : (
     <div className="w-full">
-    
       <div className="flex-1 bg-[#F4F4F4] p-4 rounded-2xl shadow-md mt-7">
         <div className="flex flex-col lg:flex-row text-sm lg:text-base">
-          <div className="flex-1 p-2 border-r border-customBlue900 flex flex-col items-center justify-center">       {/* First Column */}
-            <h2 className="text-customBlue900 font-montserrat font-bold text-center md:text-left">{getFullMonth()}</h2>
-            <p className="text-customBlue900 font-montserrat font-medium text-center md:text-left">{getFormattedDate()}</p>
+          <div className="flex-1 p-2 border-r border-customBlue900 flex flex-col items-center justify-center">
+            {" "}
+            {/* First Column */}
+            <h2 className="text-customBlue900 font-montserrat font-bold text-center md:text-left">
+              {getFullMonth()}
+            </h2>
+            <p className="text-customBlue900 font-montserrat font-medium text-center md:text-left">
+              {getFormattedDate()}
+            </p>
           </div>
 
-          <div className="flex-1 p-2 border-r border-customBlue900 flex flex-col items-center justify-center">  {/* Second Column */}
+          <div className="flex-1 p-2 border-r border-customBlue900 flex flex-col items-center justify-center">
+            {" "}
+            {/* Second Column */}
             <p className="text-customBlue900 font-montserrat font-bold text-center md:text-left">
-              <label className="mr-2 text-customBlue900 font-bold">Filter by Priority:</label>
+              <label className="mr-2 text-customBlue900 font-bold">
+                Filter by Priority:
+              </label>
               <select
                 className="p-2 border rounded-xl"
+                value={priority}
+                onChange={handleChangePriority}
               >
-                <option value="all">All</option>
+                <option value="">All</option>
                 <option value="low">Low</option>
                 <option value="medium">Medium</option>
                 <option value="high">High</option>
@@ -46,7 +84,7 @@ function Tasks() {
           </div>
 
           <div className="flex-1 p-2 flex lg:flex-row flex-col-reverse items-center justify-center">
-            <Link to={'/create-task'}>
+            <Link to={"/create-task"}>
               <button
                 type="button"
                 className="flex items-center text-white bg-customBlue900 hover:bg-customBlue900 focus:ring-4 focus:ring-customBlue900 font-montserrat rounded-lg  text-sm px-5 py-2 me-2 mb-2  lg:text-sm "
@@ -55,11 +93,12 @@ function Tasks() {
                 Add Task
               </button>
             </Link>
-            <Link to={'/categories'}>
+            <Link to={"/categories"}>
               <button
-                type='button'
-                className="flex items-center text-white bg-customBlue900 hover:bg-customBlue900 focus:ring-4 focus:ring-customBlue900 font-montserrat rounded-lg text-[16.5px] px-5 py-2.5 me-2 mb-2">
-                <TbCategoryPlus className='text-2xl text-white cursor-pointer' />
+                type="button"
+                className="flex items-center text-white bg-customBlue900 hover:bg-customBlue900 focus:ring-4 focus:ring-customBlue900 font-montserrat rounded-lg text-[16.5px] px-5 py-2.5 me-2 mb-2"
+              >
+                <TbCategoryPlus className="text-2xl text-white cursor-pointer" />
                 Categories
               </button>
             </Link>
@@ -67,7 +106,6 @@ function Tasks() {
         </div>
       </div>
 
-      
       {/* Task Columns */}
       <div className="w-full px-4 ">
         <div className="flex flex-col lg:flex-row gap-4 py-4">

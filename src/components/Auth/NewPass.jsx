@@ -43,7 +43,7 @@ export default function NewPass() {
   useEffect(() => {
     if (passwordResetFlow.resetSuccess) {
       notify("Password reset successfully", "success");
-      navigate("/login");
+      navigate("/auth/login");
     }
   }, [passwordResetFlow.resetSuccess, navigate]);
 

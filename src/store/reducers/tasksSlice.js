@@ -7,6 +7,8 @@ const initialState = {
   loading: false,
   error: null,
   stats: null,
+  searchTerm: "",
+  priority: "",
 };
 
 export const fetchTaskById = createAsyncThunk(
@@ -25,11 +27,15 @@ export const fetchTaskById = createAsyncThunk(
 
 export const fetchTasks = createAsyncThunk(
   "tasks/fetchTasks",
-  async (_, { getState, rejectWithValue }) => {
+  async ({ searchTerm = "", priority = "" }, { getState, rejectWithValue }) => {
     try {
+      const query = new URLSearchParams();
+      if (searchTerm) query.append("search", searchTerm);
+      if (priority) query.append("priority", priority);
+
       const token = getState().auth.token;
       const config = { headers: { token: `Bearer ${token}` } };
-      const response = await api.get("/tasks", config);
+      const response = await api.get(`/tasks?${query.toString()}`, config);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -91,8 +97,6 @@ export const fetchTaskStats = createAsyncThunk(
       console.log(token);
       const response = await api.get("/tasks/dash-stats", config);
 
-      console.log(response);
-
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -103,7 +107,14 @@ export const fetchTaskStats = createAsyncThunk(
 const tasksSlice = createSlice({
   name: "tasks",
   initialState,
-  reducers: {},
+  reducers: {
+    setSearchTerm: (state, action) => {
+      state.searchTerm = action.payload;
+    },
+    setPriority: (state, action) => {
+      state.priority = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchTaskById.pending, (state) => {
@@ -184,4 +195,6 @@ const tasksSlice = createSlice({
       });
   },
 });
+
+export const { setSearchTerm, setPriority } = tasksSlice.actions;
 export default tasksSlice.reducer;

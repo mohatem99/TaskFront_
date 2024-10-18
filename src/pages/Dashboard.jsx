@@ -23,7 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchTaskStats } from "../store/reducers/tasksSlice";
 import Loading from "../components/Loading";
 
-const PIRCOLORS = ["#F05252", "#FACA15","#0E9F6E"];
+const PIRCOLORS = ["#F05252", "#FACA15", "#0E9F6E"];
 const STATCOLORS = ["#98ABFF", "#546FFF", "#10197A"];
 const CATCOLORS = [
   "#10197A",
@@ -33,21 +33,31 @@ const CATCOLORS = [
   "#2A3BB7",
   "#1A2793",
   "#546FFF",
-
-
 ];
 function Dashboard() {
   const dispatch = useDispatch();
-  const { stats, loading } = useSelector((state) => state.tasks);
+  const { stats, loading, error } = useSelector((state) => state.tasks);
   useEffect(() => {
     dispatch(fetchTaskStats());
   }, [dispatch]);
-
+  if (error) {
+    return (
+      <div className="text-red-500">
+        Failed to load statistics. Please try again later.
+      </div>
+    );
+  }
   if (loading) {
     return <Loading />;
   }
   // Handle the case where stats is null
-  if (!stats) {
+  if (
+    !stats ||
+    !stats.statusStats ||
+    !stats.priorityStats ||
+    !stats.categoryStats ||
+    !stats.tasksByDate
+  ) {
     return <div>No statistics available.</div>;
   }
 
@@ -67,9 +77,8 @@ function Dashboard() {
   ];
 
   const categoryData = categoryStats?.map((cat) => ({
-    name: cat._id,
+    name: cat.categoryName, // Use the name of the category
     value: cat.count,
-    
   }));
   const tasksByDateData = tasksByDate?.map((date) => ({
     date: date._id,
@@ -78,7 +87,7 @@ function Dashboard() {
 
   return (
     <div className="task-stats-dashboard">
-      <h2 className="font-bold text-customBlue900 text-xl m-2">
+      <h2 className="font-bold text-customBlue900 text-2xl m-2">
         Task Stats Dashboard
       </h2>
 
@@ -132,7 +141,6 @@ function Dashboard() {
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip />
-              
 
               <Bar data={statusData} dataKey={"value"}>
                 {statusData.map((entry, index) => (
@@ -186,15 +194,14 @@ function Dashboard() {
           </h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart
-              data={categoryData}
+              data={categoryData} // Ensure this data has the correct structure
               margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
             >
               <CartesianGrid strokeDasharray="3 3" />
-              {/* name here is category id, needs modification */}
-              <XAxis dataKey="name" />  
+              <XAxis dataKey="name" />{" "}
+              {/* This should match your category name field */}
               <YAxis />
               <Tooltip />
-
               <Bar dataKey="value">
                 {categoryData.map((entry, index) => (
                   <Cell

@@ -61,7 +61,7 @@ export default function CheckEmail() {
 
   useEffect(() => {
     if (passwordResetFlow.otpVerified) {
-      navigate("/new-pass");
+      navigate("/auth/new-pass");
     }
   }, [passwordResetFlow.otpVerified, navigate]);
 
