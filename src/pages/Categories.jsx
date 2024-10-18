@@ -3,15 +3,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import Loading from '../components/Loading';
 import AddCategoryForm from '../components/taskComponents/AddCategoryForm';
 import EditCategoryModal from '../components/taskComponents/EditCategoryModal';
-import { fetchCategories, removeCategory} from '../store/reducers/categoriesSlice';
+import { fetchCategories, removeCategory } from '../store/reducers/categoriesSlice';
 import { IoMdAdd } from 'react-icons/io';
 import notify from '../hooks/useNotification';
+import Error from '../components/Error';
+import ConfirmModal from '../components/ConfirmModal';
 
 export default function Categories() {
     const dispatch = useDispatch();
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+    const [modalState, setModalState] = useState({ type: '', isOpen: false, selectedCategoryId: null });
     const { categories, loading, error } = useSelector((state) => state.categories);
 
     useEffect(() => {
@@ -19,25 +19,13 @@ export default function Categories() {
     }, [dispatch]);
 
     const handleRemove = (categoryId) => {
-        dispatch(removeCategory(categoryId))
+        dispatch(removeCategory(categoryId));
         notify("Category Deleted Successfully", "success");
-    }
-
-    const openModal = () => {
-        setIsModalOpen(true);
+        setModalState({ ...modalState, isOpen: false });
     };
 
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
-
-    const openEditModal = () => {
-        setIsEditModalOpen(true);
-    };
-
-    const closeEditModal = () => {
-        setIsEditModalOpen(false);
-        setSelectedCategoryId(null);
+    const toggleModal = (type, isOpen, categoryId = null) => {
+        setModalState({ type, isOpen, selectedCategoryId: categoryId });
     };
 
     if (loading) {
@@ -57,7 +45,7 @@ export default function Categories() {
             <div className="w-full flex justify-end mb-4">
                 <button
                     type="button"
-                    onClick={openModal}
+                    onClick={() => toggleModal('add', true)}
                     className="flex items-center text-white bg-customBlue900 hover:bg-customBlue900 focus:ring-4 focus:ring-customBlue900 font-montserrat rounded-3xl text-[15px] px-5 py-2.5"
                 >
                     <IoMdAdd className="text-2xl text-white cursor-pointer" />
@@ -76,34 +64,40 @@ export default function Categories() {
                             </tr>
                         </thead>
                         <tbody>
-                            {categories?.length > 0 ? (
-                                categories?.map((category) =>
+                            {categories.length > 0 ? (
+                                categories.map((category) => (
                                     <tr
                                         key={category._id}
                                         className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                                     >
-                                        <td className="px-6 py-4 text-center font-montserrat font-semibold text-customBlue900 text-[18px]">{category?.name} </td>
+                                        <td className="px-6 py-4 text-center font-montserrat font-semibold text-customBlue900 text-[18px]">
+                                            {category?.name}
+                                        </td>
                                         <td className="px-6 py-4 flex justify-center items-center gap-4">
-                                            <button
-                                                className="bg-red-600 hover:bg-red-700 text-white font-bold font-montserrat py-2 px-4 rounded"
-                                                onClick={() => handleRemove(category?._id)}
-                                            >
-                                                Delete
-                                            </button>
+                                            <div>
+                                                <button
+                                                    className="bg-red-600 hover:bg-red-700 text-white font-bold font-montserrat py-2 px-4 rounded"
+                                                    onClick={() => toggleModal('delete', true, category._id)}
+                                                >
+                                                    Delete
+                                                </button>
+                                                <ConfirmModal
+                                                    message={`Are you sure you want to delete the Category: "${category?.name}"?`}
+                                                    isOpen={modalState.type === 'delete' && modalState.isOpen}
+                                                    onConfirm={() => handleRemove(category._id)}
+                                                    onCancel={() => toggleModal('delete', false)}
+                                                />
+                                            </div>
                                             {" | "}
                                             <button
                                                 className="bg-customBlue900 hover:bg-blue-700 text-white font-bold font-montserrat py-2 px-4 rounded"
-                                                onClick={() => {
-                                                    openEditModal(category?._id)
-                                                    setSelectedCategoryId(category?._id)
-                                                }
-                                                }
+                                                onClick={() => toggleModal('edit', true, category._id)}
                                             >
                                                 Edit
                                             </button>
                                         </td>
                                     </tr>
-                                )
+                                ))
                             ) : (
                                 <tr>
                                     <td colSpan="3" className="text-center py-4">
@@ -117,10 +111,12 @@ export default function Categories() {
             </div>
 
             {/* Render AddCategoryForm Modal */}
-            {isModalOpen && <AddCategoryForm onClose={closeModal} />}
+            {modalState.type === 'add' && modalState.isOpen && <AddCategoryForm onClose={() => toggleModal('add', false)} />}
 
-            {/* Render EditCategoryModal if a category is selected for editing */}
-            {isEditModalOpen && <EditCategoryModal categoryId={selectedCategoryId} onClose={closeEditModal} />}
+            {/* Render EditCategoryModal */}
+            {modalState.type === 'edit' && modalState.isOpen && (
+                <EditCategoryModal categoryId={modalState.selectedCategoryId} onClose={() => toggleModal('edit', false)} />
+            )}
         </div>
     );
 }

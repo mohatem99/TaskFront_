@@ -7,6 +7,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { getFormattedDate, getFullMonth } from "../utilis/dateUtils";
 import { fetchTasks, setPriority } from "../store/reducers/tasksSlice";
 import TaskColumn from "../components/taskComponents/TaskColumn";
+import Error from "../components/Error";
 
 function Tasks() {
   const dispatch = useDispatch();
