@@ -101,7 +101,6 @@ const authSlice = createSlice({
   reducers: {
     initialAuth: (state) => {
       const { token, user } = loadAuthData();
-      console.log(user, token);
 
       if (token) {
         state.token = token;
