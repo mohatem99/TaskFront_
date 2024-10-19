@@ -5,15 +5,15 @@
 
 ## 📌 Table of Contents
 
-- [🌟 Overview]
-- [🚀 Features]
-- [Tech Stack](#tech-stack)
-- [Installation](#installation)
-- [Usage](#usage)
-- [API Documentation](#api-documentation)
-- [Authentication](#authentication)
-- [Contributing](#contributing)
-- [License](#license)
+- [🌟 Overview](#-overview)
+- [🚀 Features](#-featuers)
+- [Tech Stack](#-tech-stack)
+- [Installation](#-installation)
+- [Usage](#-usage)
+- [API Documentation](#-api-documentation)
+- [Authentication](#-authentication)
+- [Contributing](#-contributing)
+- [License](#-license)
 
 ## 🌟 Overview
 
