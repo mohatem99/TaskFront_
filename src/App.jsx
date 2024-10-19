@@ -104,10 +104,10 @@ function App() {
           <Route index element={<Landing />} />
 
           <Route path="login" element={<Login />} />
-          <Route index path="signup" element={<SignUp />} />
-          <Route index path="forget-pass" element={<ForgetPass />} />
-          <Route index path="check-email" element={<CheckEmail />} />
-          <Route index path="new-pass" element={<NewPass />} />
+          <Route path="signup" element={<SignUp />} />
+          <Route path="forget-pass" element={<ForgetPass />} />
+          <Route path="check-email" element={<CheckEmail />} />
+          <Route path="new-pass" element={<NewPass />} />
         </Route>
         <Route path="*" element={<NotFound />}/>
       </Routes>
