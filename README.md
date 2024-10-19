@@ -5,8 +5,8 @@
 
 ## 📌 Table of Contents
 
-- [[#🌟 Overview]]
-- [[#🚀 Features]]
+- [🌟 Overview]
+- [🚀 Features]
 - [Tech Stack](#tech-stack)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -55,11 +55,7 @@ To get a local copy up and running, follow these steps:
 
 1. **Clone the repository:**
     
-    bash
-    
-    Copy code
-    
-    `git clone https://github.com/mohatem99/task-management-system.git `
+    ```git clone https://github.com/mohatem99/task-management-system.git ```
     
 2. **Install dependencies:**
     
@@ -72,50 +68,33 @@ To get a local copy up and running, follow these steps:
     `cd backend npm install`
     
     **Frontend:**
-    
-    bash
-    
-    Copy code
-    
-    `cd frontend npm install`
+
+    ```cd frontend npm install```
     
 3. **Set up environment variables:** Create a `.env` file in both `frontend` and `backend` directories with the following keys:
     
     **Backend:**
-    
-    makefile
-    
-    Copy code
-    
-    `PORT=5000 MONGO_URI=your-mongodb-uri JWT_SECRET=your-jwt-secret SOCKET_PORT=5001`
+    ```PORT=5000 MONGO_URI=your-mongodb-uri JWT_SECRET=your-jwt-secret SOCKET_PORT=5001```
     
     **Frontend:**
-    
-    bash
-    
-    Copy code
-    
-    `REACT_APP_API_URL=http://localhost:5000/api`
+    ```REACT_APP_API_URL=http://localhost:5000/api```
     
 4. **Run the application:**
     
     **Backend:**
-    
-    bash
-    
-    Copy code
-    
-    `cd backend npm run dev`
+    ```
+    cd backend
+    npm install
+    npm start
+   ```
     
     **Frontend:**
     
-    bash
     
-    Copy code
+    ```npm run dev```
+
     
-    `cd frontend npm start`
-    
-5. **Access the application:** Open your browser and go to `http://localhost:3000`.
+6. **Access the application:** Open your browser and go to `http://localhost:3000`.
     
 
 ## 💡 Usage
