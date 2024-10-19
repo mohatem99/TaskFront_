@@ -113,17 +113,42 @@ To get a local copy up and running, follow these steps:
 
 ## 📋 API Documentation
 
-|Endpoint|Method|Description|
-|---|---|---|
-|`/api/tasks`|GET|Get all tasks|
-|`/api/tasks`|POST|Create a new task|
-|`/api/tasks/:id`|GET|Get task by ID|
-|`/api/tasks/:id`|PUT|Update task by ID|
-|`/api/tasks/:id`|DELETE|Delete task by ID|
-|`/api/auth/register`|POST|Register a new user|
-|`/api/auth/login`|POST|Login a user and receive a JWT|
-|`/api/auth/forgot-password`|POST|Request password reset|
-|`/api/auth/reset-password`|POST|Reset password using OTP|
+
+| **Endpoint**                      | **Method** | **Description**                                                                             |
+| --------------------------------- | ---------- | ------------------------------------------------------------------------------------------- |
+| **Auth Endpoints**                |            |                                                                                             |
+| `/auth/register`                  | POST       | Register a new user                                                                         |
+| `/auth/login`                     | POST       | Log in and receive a JWT token                                                              |
+| `/auth/forgetPassword`            | POST       | Request password reset OTP                                                                  |
+| `/auth/verify-otp`                | POST       | Verify the OTP for password reset                                                           |
+| `/auth/reset-password`            | POST       | Reset the user's password after OTP verification                                            |
+| **Categories Endpoints**          |            |                                                                                             |
+| `/categories`                     | POST       | Create a new category                                                                       |
+| `/categories/:cat_id`             | PUT        | Update an existing category (replace `:cat_id` with category ID)                            |
+| `/categories/:user_id`            | GET        | Get categories for a specific user (replace `:user_id` with user ID)                        |
+| `/categories/:cat_id`             | DELETE     | Delete a category (replace `:cat_id` with category ID)                                      |
+| `/categories`                     | GET        | Get all categories for all users                                                            |
+| **Tasks Endpoints**               |            |                                                                                             |
+| `/tasks`                          | POST       | Create a new task                                                                           |
+| `/dash-stats`                     | GET        | Get task statistics                                                                         |
+| `/tasks`                          | GET        | Get tasks for the logged-in user                                                            |
+| `/tasks/:task_id`                 | PUT        | Update an existing task (replace `:task_id` with task ID)                                   |
+| `/tasks/:task_id`                 | DELETE     | Delete a task (replace `:task_id` with task ID)                                             |
+| `/tasks/:task_id`                 | GET        | Get a specific task by its ID (replace `:task_id` with task ID)                             |
+| **User Endpoints**                |            |                                                                                             |
+| `/users`                          | GET        | Get a list of all users                                                                     |
+| `/users/update-me`                | PUT        | Update the logged-in user's information                                                     |
+| `/users/update-my-password`       | PUT        | Update the logged-in user's password                                                        |
+| `/users/me`                       | GET        | Get the profile data for the logged-in user                                                 |
+| **Notification Endpoints**        |            |                                                                                             |
+| `/notifications`                  | GET        | Get notifications for the logged-in user                                                    |
+| `/notifications/:notification_id` | PUT        | Update a task that triggers notifications (replace `:notification_id` with notification ID) |
+
+##### Notes:
+
+- Ensure to replace the parameters (like `:cat_id`, `:user_id`, `:task_id`, and `:notification_id`) with the actual values when making requests.
+
+
 
 ## 🔑 Authentication
 
