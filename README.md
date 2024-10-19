@@ -33,7 +33,7 @@ The **Task Management System** is designed to help individuals and teams manage 
 
 **Frontend:**
 
-- React.js
+- React.js , Vite
 - TailwindCSS
 - Flowbite
 
@@ -60,15 +60,9 @@ To get a local copy up and running, follow these steps:
 2. **Install dependencies:**
     
     **Backend:**
-    
-    bash
-    
-    Copy code
-    
     `cd backend npm install`
     
     **Frontend:**
-
     ```cd frontend npm install```
     
 3. **Set up environment variables:** Create a `.env` file in both `frontend` and `backend` directories with the following keys:
@@ -89,8 +83,6 @@ To get a local copy up and running, follow these steps:
    ```
     
     **Frontend:**
-    
-    
     ```npm run dev```
 
     
