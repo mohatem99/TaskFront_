@@ -51,7 +51,7 @@ function Tasks() {
 
 if (error) {
     return (
-        <Error message="Failed to load categories. Please try again." />
+        <Error message="Failed to load Tasks." />
     );
 }
 
