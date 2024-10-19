@@ -8,40 +8,47 @@ import { IoMdAdd } from 'react-icons/io';
 import notify from '../hooks/useNotification';
 import Error from '../components/taskComponents/Error';
 import ConfirmModal from '../components/taskComponents/ConfirmModal';
-
+ 
 export default function Categories() {
     const dispatch = useDispatch();
-    const [modalState, setModalState] = useState({ type: '', isOpen: false, selectedCategoryId: null });
+    const [modalState, setModalState] = useState({ type: '', isOpen: false, category: null });
     const { categories, loading, error } = useSelector((state) => state.categories);
-
+ 
+    // Fetch categories on component load
     useEffect(() => {
         dispatch(fetchCategories());
     }, [dispatch]);
-
-    const handleRemove = (categoryId) => {
-        dispatch(removeCategory(categoryId));
-        notify("Category Deleted Successfully", "success");
-        setModalState({ ...modalState, isOpen: false });
+ 
+    // Handle category removal
+    const handleRemove = async (categoryId) => {
+        try {
+            await dispatch(removeCategory(categoryId)).unwrap();
+            notify("Category Deleted Successfully", "success");
+            setModalState({ ...modalState, isOpen: false });
+        } catch (error) {
+            notify("Failed to delete category", "error");
+        }
     };
-
-    const toggleModal = (type, isOpen, categoryId = null) => {
-        setModalState({ type, isOpen, selectedCategoryId: categoryId });
+ 
+ 
+    const toggleModal = (type, isOpen, category = null) => {
+        setModalState({ type, isOpen, category }); // Store the entire category object
     };
-
+ 
+    // Render loading state
     if (loading) {
         return <Loading />;
     }
-
+ 
+    // Render error state
     if (error) {
-        return (
-            <Error message="Failed to load categories. Please try again." />
-        );
+        return <Error message="Failed to load categories. Please try again." />;
     }
-
+ 
     return (
         <div className="flex flex-col items-center justify-center p-4">
             <h1 className="text-customBlue900 font-montserrat text-[25px] font-bold mb-6 text-center">Categories</h1>
-
+ 
             <div className="w-full flex justify-end mb-4">
                 <button
                     type="button"
@@ -52,8 +59,8 @@ export default function Categories() {
                     <span className="ml-2">Add Category</span>
                 </button>
             </div>
-
-            {/* Table */}
+ 
+            {/* Categories Table */}
             <div className="w-full max-w-4xl">
                 <div className="relative overflow-x-auto shadow-md rounded-lg">
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -74,24 +81,26 @@ export default function Categories() {
                                             {category?.name}
                                         </td>
                                         <td className="px-6 py-4 flex justify-center items-center gap-4">
+                                            {/* Delete button */}
                                             <div>
                                                 <button
                                                     className="bg-red-600 hover:bg-red-700 text-white font-bold font-montserrat py-2 px-4 rounded"
-                                                    onClick={() => toggleModal('delete', true, category._id)}
+                                                    onClick={() => toggleModal('delete', true, category)} // Pass the entire category object
                                                 >
                                                     Delete
                                                 </button>
                                                 <ConfirmModal
-                                                    message={`Are you sure you want to delete the Category: "${category?.name}"?`}
+                                                    message={`Are you sure you want to delete the Category: "${modalState.category?.name}"?`}
                                                     isOpen={modalState.type === 'delete' && modalState.isOpen}
-                                                    onConfirm={() => handleRemove(category._id)}
+                                                    onConfirm={() => handleRemove(modalState.category?._id)} // Use correct categoryId from modalState.category
                                                     onCancel={() => toggleModal('delete', false)}
                                                 />
                                             </div>
                                             {" | "}
+                                            {/* Edit button */}
                                             <button
                                                 className="bg-customBlue900 hover:bg-blue-700 text-white font-bold font-montserrat py-2 px-4 rounded"
-                                                onClick={() => toggleModal('edit', true, category._id)}
+                                                onClick={() => toggleModal('edit', true, category)}
                                             >
                                                 Edit
                                             </button>
@@ -100,7 +109,7 @@ export default function Categories() {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="3" className="text-center py-4">
+                                    <td colSpan="2" className="text-center py-4">
                                         No Categories Found
                                     </td>
                                 </tr>
@@ -109,14 +118,17 @@ export default function Categories() {
                     </table>
                 </div>
             </div>
-
+ 
             {/* Render AddCategoryForm Modal */}
-            {modalState.type === 'add' && modalState.isOpen && <AddCategoryForm onClose={() => toggleModal('add', false)} />}
-
+            {modalState.type === 'add' && modalState.isOpen && (
+                <AddCategoryForm onClose={() => toggleModal('add', false)} />
+            )}
+ 
             {/* Render EditCategoryModal */}
             {modalState.type === 'edit' && modalState.isOpen && (
-                <EditCategoryModal categoryId={modalState.selectedCategoryId} onClose={() => toggleModal('edit', false)} />
+                <EditCategoryModal categoryId={modalState.category?._id} onClose={() => toggleModal('edit', false)} />
             )}
         </div>
     );
 }
+ 

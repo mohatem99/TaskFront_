@@ -1,13 +1,14 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { addCategory } from "../../store/reducers/categoriesSlice";
 import notify from "../../hooks/useNotification";
-
+ 
 export default function AddCategoryForm({ onClose }) {
   const dispatch = useDispatch();
-
+  const categories = useSelector((state) => state.categories.categories);
+ 
   const formik = useFormik({
     initialValues: {
       categoryName: "",
@@ -20,17 +21,27 @@ export default function AddCategoryForm({ onClose }) {
         .max(30, "Too Long!"),
     }),
     onSubmit: (values, { resetForm }) => {
+      // Check for duplicate category name
+      const isDuplicate = categories.some(
+        (category) => category.name.toLowerCase() === values.categoryName.toLowerCase()
+      );
+ 
+      if (isDuplicate) {
+        notify("This category already exists!", "error");
+        return; // Prevent form submission if duplicate found
+      }
+ 
       dispatch(addCategory({ name: values.categoryName }));
       resetForm();
       onClose();
       notify("Category Added Successfully", "success");
     },
   });
-
+ 
   const handleCancel = () => {
     onClose();
   };
-
+ 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-xl">
@@ -81,3 +92,4 @@ export default function AddCategoryForm({ onClose }) {
     </div>
   );
 }
+ 
