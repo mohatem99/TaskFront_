@@ -1,3 +1,4 @@
+import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +15,6 @@ import ConfirmModal from "../Confirm/ConfirmModal";
 const TaskForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const [loading, setLoading] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const { loading } = useSelector((state) => state.tasks);
 
@@ -38,13 +38,13 @@ const TaskForm = () => {
   );
   const allUsersFromRedux = useSelector((store) => store.users.users);
 
-  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
+  const handleSubmit = async (values, { setSubmitting }) => {
     try {
       const taskData = {
         title: values.title,
         categoryId: values.category,
         description: values.description,
-        dueDate: values.dueDate,
+        dueDate: moment(values.dueDate).toISOString(),
         status: values.status,
         priority: values.priority,
         assignedTo: values.assignedTo,
@@ -60,7 +60,6 @@ const TaskForm = () => {
       notify("Task creation failed due to an error", "error");
     } finally {
       setSubmitting(false);
-      // loading(false);
     }
   };
 

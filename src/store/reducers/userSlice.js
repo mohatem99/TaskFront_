@@ -10,9 +10,11 @@ const initialState = {
 };
 export const allUsers = createAsyncThunk(
   "users/allUsers",
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue ,getState}) => {
     try {
-      const response = await api.get("/users");
+      const token = getState().auth.token;
+      const config = { headers: { token: `Bearer ${token}` } };
+      const response = await api.get("/users",config);
 
       return response.data;
     } catch (error) {

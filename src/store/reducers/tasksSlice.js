@@ -77,7 +77,7 @@ export const updateTask = createAsyncThunk(
   async ({ taskId, task }, { getState, rejectWithValue }) => {
     try {
       const token = getState().auth.token;
-
+console.log(task);
       const config = { headers: { token: `Bearer ${token}` } };
       const response = await api.put(`/tasks/${taskId}`, task, config);
       return response.data;

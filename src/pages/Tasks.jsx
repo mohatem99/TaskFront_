@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { IoMdAdd } from "react-icons/io";
 import { TbCategoryPlus } from "react-icons/tb";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-
+import Error from "../components/taskComponents/Error"
 import { fetchTasks, setPriority } from "../store/reducers/tasksSlice";
 import TaskColumn from "../components/taskComponents/TaskColumn";
 
@@ -45,11 +45,17 @@ function Tasks() {
     dispatch(fetchTasks({ searchTerm, priority }));
   }, [dispatch, searchTerm, priority]);
 
-  return loading ? (
-    <div className="py-10">
-      <Loading />
-    </div>
-  ) : (
+  if (loading) {
+    return <Loading />;
+}
+
+if (error) {
+    return (
+        <Error message="Failed to load categories. Please try again." />
+    );
+}
+
+  return  (
     <div className="w-full ">
       <div className="flex-1 bg-white p-4 rounded-2xl shadow-md mt-7">
         <div className="flex flex-col lg:flex-row text-sm lg:text-base">
@@ -118,7 +124,7 @@ function Tasks() {
               title="Pending"
               tasks={tasks}
               status="pending"
-              onAddTask="/create-task?status=pending"
+              onAddTask="/create-task"
             />
 
             {/* In Progress Column */}
@@ -126,7 +132,7 @@ function Tasks() {
               title="In Progress"
               tasks={tasks}
               status="in progress"
-              onAddTask="/create-task?status=in progress"
+              onAddTask="/create-task"
             />
 
             {/* Completed Column */}
@@ -134,7 +140,7 @@ function Tasks() {
               title="Completed"
               tasks={tasks}
               status="completed"
-              onAddTask="/create-task?status=completed"
+              onAddTask="/create-task"
             />
           </div>
         )}

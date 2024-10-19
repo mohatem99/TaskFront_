@@ -60,7 +60,7 @@ const EditTaskForm = () => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      const result = await dispatch(updateTask({ taskId, task: values }));
+      const result = await dispatch(updateTask({ taskId, task: values, dueDate:moment(values.dueDate).toISOString() }));
 
       if (result) {
         navigate("/tasks");
