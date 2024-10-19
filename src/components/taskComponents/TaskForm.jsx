@@ -60,7 +60,7 @@ const TaskForm = () => {
       notify("Task creation failed due to an error", "error");
     } finally {
       setSubmitting(false);
-      loading(false);
+      // loading(false);
     }
   };
 

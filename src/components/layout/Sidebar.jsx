@@ -3,12 +3,15 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { setOpenSidebar } from "../../store/reducers/authSlice";
 import { logout } from "../../store/reducers/authSlice";
 import { IoCloseSharp } from "react-icons/io5";
+import ConfirmModal from "../Confirm/ConfirmModal";
+import { useState } from "react";
 
 export default function Sidebar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isSidebarOpen } = useSelector((state) => state.auth);
   const location = useLocation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const isActive = (path) => location.pathname === path;
 
@@ -16,13 +19,26 @@ export default function Sidebar() {
     dispatch(setOpenSidebar(false));
   };
 
-  const handleLogout = () => {
-    const isConfirmed = window.confirm("Are you sure you want to log out?");
+  // const handleLogout = () => {
+  //   const isConfirmed = window.confirm("Are you sure you want to log out?");
 
-    if (isConfirmed) {
-      dispatch(logout());
-      navigate("/auth");
-    }
+  //   if (isConfirmed) {
+  //     dispatch(logout());
+  //     navigate("/auth");
+  //   }
+  // };
+
+  const handleLogout = () => {
+    setIsModalOpen(true); // Open the confirmation modal
+  };
+  const confirmLogout = () => {
+    dispatch(logout());
+    notify("Edit task  cancelled", "success");
+    navigate("/auth");
+  };
+  // Cancel the cancel action
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -220,6 +236,13 @@ export default function Sidebar() {
               </Link>
             </li>
           </ul>
+          {/* Add the ConfirmModal */}
+          <ConfirmModal
+            message="Are you sure you want to Leave Us 💔"
+            onConfirm={confirmLogout}
+            onCancel={closeModal}
+            isOpen={isModalOpen}
+          />
         </div>
       </aside>
     </>
