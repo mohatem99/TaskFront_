@@ -46,7 +46,7 @@ const NotificationPanel = () => {
       <Popover className="relative">
         <PopoverButton className="inline-flex items-center outline-none">
           <div className="w-8 h-8 flex items-center justify-center text-gray-800 relative">
-            <img src={NotificationIcon} className="w-6 h-6 mt-2 ml-2" />;
+            <img src={NotificationIcon} className="w-6 h-6 mt-2 ml-2" />
             {
               <span className="absolute text-center top-0 right-1 text-sm text-white font-semibold w-4 h-4 rounded-full bg-red-600">
                 {unseenCount}
