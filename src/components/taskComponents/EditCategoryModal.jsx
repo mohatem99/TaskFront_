@@ -3,12 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { updateCategory } from "../../store/reducers/categoriesSlice";
+import notify from "../../hooks/useNotification";
+
 
 export default function EditCategoryModal({ onClose, categoryId }) {
   const dispatch = useDispatch();
   const category = useSelector((store) =>
     store.categories.categories.find((cat) => cat._id === categoryId)
   );
+    const categories = useSelector((state) => state.categories.categories);
 
   const formik = useFormik({
     initialValues: {
@@ -22,8 +25,20 @@ export default function EditCategoryModal({ onClose, categoryId }) {
         .max(30, "Too Long!"),
     }),
     onSubmit: (values) => {
+        // Check for duplicate category name
+      const isDuplicate = categories.some(
+        (category) =>
+          category.name.toLowerCase() === values.categoryName.toLowerCase()
+      );
+
+      if (isDuplicate) {
+        notify("This category already exists!", "error");
+        return; // Prevent form submission if duplicate found
+      }
       dispatch(updateCategory({ id: categoryId, name: values.categoryName }));
       onClose();
+      notify("Category Updated Successfully", "success");
+    },
     },
   });
 
